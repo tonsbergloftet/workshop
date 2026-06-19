@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="only light">
+<title>Veien inn — Fremtidsscenario 2028</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html {
+    color-scheme: only light;
+    scroll-behavior: smooth;
+  }
+
+  :root {
+    color-scheme: only light;
+    --bg:        #F5F1EB;
+    --bg2:       #EDE8DF;
+    --white:     #FFFFFF;
+    --ink:       #1A1410;
+    --ink-mid:   #3D3530;
+    --ink-dim:   #6B6058;
+    --teal:      #1F6355;
+    --teal-bg:   #D8EEE9;
+    --rust:      #A83820;
+    --rust-bg:   #FAEBE6;
+    --amber:     #A86010;
+    --amber-bg:  #FDF0DC;
+    --green:     #2A6B3A;
+    --green-bg:  #DFF0E4;
+    --border:    rgba(42,37,32,0.13);
+    --serif:     'Lora', Georgia, serif;
+    --hand:      'Caveat', cursive;
+    --sans:      'Inter', system-ui, sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.65;
+    min-height: 100vh;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 72px 24px 64px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 25% 110%, rgba(31,99,85,0.07) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 50% at 80% 0%,   rgba(168,96,16,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-meta {
+    font-family: var(--hand);
+    font-size: 18px;
+    color: var(--teal);
+    margin-bottom: 14px;
+    position: relative;
+  }
+
+  .hero h1 {
+    font-family: var(--hand);
+    font-size: clamp(56px, 12vw, 100px);
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.0;
+    margin-bottom: 16px;
+    position: relative;
+  }
+
+  .hero h1 span { color: var(--teal); }
+
+  .hero-sub {
+    font-family: var(--serif);
+    font-size: clamp(15px, 2.5vw, 18px);
+    font-style: italic;
+    color: var(--ink-mid);
+    max-width: 520px;
+    margin: 0 auto 44px;
+    line-height: 1.65;
+    position: relative;
+  }
+
+  .hero-facts {
+    display: flex;
+    justify-content: center;
+    max-width: 400px;
+    margin: 0 auto;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--bg);
+    position: relative;
+  }
+
+  .fact {
+    flex: 1;
+    padding: 14px 12px;
+    border-right: 1px solid var(--border);
+    text-align: center;
+  }
+
+  .fact:last-child { border-right: none; }
+
+  .fact-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.13em;
+    color: var(--ink-dim);
+    margin-bottom: 5px;
+  }
+
+  .fact-value {
+    font-family: var(--hand);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  /* ── LAYOUT ── */
+  .content {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ── CHAPTER ── */
+  .chapter {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 68px 0 28px;
+  }
+
+  .chapter-tag {
+    font-family: var(--hand);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--teal);
+    white-space: nowrap;
+  }
+
+  .chapter-rule {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── PROSE ── */
+  .prose h2 {
+    font-family: var(--hand);
+    font-size: clamp(30px, 6vw, 46px);
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+
+  .prose p {
+    color: var(--ink-mid);
+    margin-bottom: 12px;
+    line-height: 1.75;
+  }
+
+  .prose p.lead {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-style: italic;
+    color: var(--ink);
+    line-height: 1.7;
+  }
+
+  /* ── JOURNEY ── */
+  .journey-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 8px 0 12px;
+    margin: 28px 0;
+  }
+
+  .journey-track {
+    display: flex;
+    align-items: flex-start;
+    min-width: 500px;
+  }
+
+  .j-node {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+
+  .j-node::after {
+    content: '';
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    right: -50%;
+    height: 1px;
+    background: var(--border);
+    z-index: 0;
+  }
+
+  .j-node:last-child::after { display: none; }
+
+  .j-dot {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--white);
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .j-dot.warn  { border-color: var(--amber); background: var(--amber-bg); }
+  .j-dot.alert { border-color: var(--rust);  background: var(--rust-bg); }
+  .j-dot.ok    { border-color: var(--teal);  background: var(--teal-bg); }
+
+  .j-label {
+    font-size: 10px;
+    color: var(--ink-mid);
+    text-align: center;
+    margin-top: 8px;
+    line-height: 1.35;
+    max-width: 68px;
+  }
+
+  .j-flag {
+    font-family: var(--hand);
+    font-size: 12px;
+    margin-top: 3px;
+    text-align: center;
+  }
+
+  .j-flag.rust  { color: var(--rust); }
+  .j-flag.amber { color: var(--amber); }
+  .j-flag.teal  { color: var(--teal); }
+
+  /* ── CARD GRID ── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 24px 0;
+  }
+
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 18px;
+  }
+
+  .card-num {
+    font-family: var(--hand);
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--teal);
+    opacity: 0.22;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .card-title {
+    font-family: var(--serif);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.4;
+    margin-bottom: 7px;
+  }
+
+  .card-meta {
+    font-size: 11px;
+    color: var(--ink-mid);
+    line-height: 1.65;
+  }
+
+  /* ── THREE LAYERS ── */
+  .layers {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin: 24px 0;
+  }
+
+  .layer {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 16px;
+  }
+
+  .layer-icon { font-size: 20px; margin-bottom: 8px; }
+
+  .layer-title {
+    font-family: var(--hand);
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+
+  .layer-list { list-style: none; }
+
+  .layer-list li {
+    font-size: 11px;
+    color: var(--ink-mid);
+    padding: 4px 0;
+    border-top: 1px solid var(--border);
+    line-height: 1.4;
+  }
+
+  .layer-list li:first-child { border-top: none; }
+
+  /* ── MOVEMENT ── */
+  .movement {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 8px;
+    margin: 24px 0;
+  }
+
+  .m-step {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 12px;
+  }
+
+  .m-badge {
+    font-size: 10px;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 20px;
+    margin-bottom: 9px;
+    display: inline-block;
+  }
+
+  .m-rust   { background: var(--rust-bg);   color: var(--rust); }
+  .m-amber  { background: var(--amber-bg);  color: var(--amber); }
+  .m-neutral { background: var(--bg2); color: var(--ink-dim); }
+  .m-teal   { background: var(--teal-bg);   color: var(--teal); }
+
+  .m-title {
+    font-family: var(--hand);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 5px;
+  }
+
+  .m-desc {
+    font-size: 10px;
+    color: var(--ink-mid);
+    line-height: 1.55;
+  }
+
+  /* ── DASHBOARD ── */
+  .dash {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    margin: 24px 0;
+  }
+
+  .dash-head {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg2);
+  }
+
+  .dash-head-title {
+    font-family: var(--hand);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .dash-row {
+    display: grid;
+    grid-template-columns: 140px 1fr auto;
+    gap: 12px;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    align-items: start;
+  }
+
+  .dash-row:last-child { border-bottom: none; }
+
+  .dash-journey {
+    font-family: var(--serif);
+    font-size: 13px;
+    color: var(--ink);
+    font-weight: 500;
+    line-height: 1.4;
+    padding-top: 2px;
+  }
+
+  .dash-note {
+    font-size: 12px;
+    color: var(--ink-mid);
+    line-height: 1.6;
+  }
+
+  .status-pill {
+    font-size: 10px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+    align-self: start;
+  }
+
+  .pill-red    { background: var(--rust-bg);   color: var(--rust); }
+  .pill-yellow { background: var(--amber-bg);  color: var(--amber); }
+  .pill-green  { background: var(--teal-bg);   color: var(--teal); }
+
+  /* ── SITUATION PANEL ── */
+  .sit-panel {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    margin: 24px 0;
+  }
+
+  .sit-top {
+    background: var(--bg2);
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .sit-top-label {
+    font-family: var(--hand);
+    font-size: 13px;
+    color: var(--teal);
+    font-weight: 600;
+    margin-bottom: 3px;
+  }
+
+  .sit-top-title {
+    font-family: var(--hand);
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .sit-body {
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .sit-flags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+
+  .flag-chip {
+    font-size: 10px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: var(--rust-bg);
+    color: var(--rust);
+  }
+
+  .flag-chip.amber { background: var(--amber-bg); color: var(--amber); }
+
+  .sit-list { list-style: none; }
+
+  .sit-list li {
+    font-size: 12px;
+    color: var(--ink-mid);
+    padding: 6px 0 6px 12px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .sit-list li::before { content: '·'; position: absolute; left: 2px; color: var(--ink-dim); }
+  .sit-list li:last-child { border-bottom: none; }
+
+  /* ── MOVEMENT TABLE ── */
+  .mov-col-title {
+    font-family: var(--hand);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+
+  .mov-row {
+    display: grid;
+    grid-template-columns: 1fr 34px 34px;
+    gap: 6px;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+  }
+
+  .mov-row:last-child { border-bottom: none; }
+  .mov-label { font-size: 11px; color: var(--ink-mid); line-height: 1.3; }
+
+  .mov-num {
+    font-family: var(--hand);
+    font-size: 17px;
+    font-weight: 600;
+    text-align: right;
+    color: var(--ink-mid);
+  }
+
+  .mov-num.down { color: var(--rust); }
+  .mov-num.up   { color: var(--teal); }
+
+  .mov-head {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-dim);
+    text-align: right;
+  }
+
+  .mov-note {
+    font-family: var(--serif);
+    font-size: 12px;
+    font-style: italic;
+    color: var(--rust);
+    margin-top: 10px;
+    line-height: 1.5;
+  }
+
+  .mov-note.amber { color: var(--amber); }
+
+  /* ── DECISIONS ── */
+  .decision-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 24px 0;
+  }
+
+  .d-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 18px;
+  }
+
+  .d-card.political {
+    border-color: rgba(168,96,16,0.3);
+    background: var(--amber-bg);
+  }
+
+  .d-letter {
+    font-family: var(--hand);
+    font-size: 46px;
+    font-weight: 700;
+    color: var(--teal);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .d-card.political .d-letter { color: var(--amber); }
+
+  .d-title {
+    font-family: var(--serif);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 7px;
+    line-height: 1.35;
+  }
+
+  .d-desc {
+    font-size: 12px;
+    color: var(--ink-mid);
+    margin-bottom: 12px;
+    line-height: 1.6;
+  }
+
+  .d-tension-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-dim);
+    margin-bottom: 3px;
+  }
+
+  .d-tension {
+    font-family: var(--serif);
+    font-size: 11px;
+    font-style: italic;
+    color: var(--ink-mid);
+    line-height: 1.55;
+  }
+
+  /* ── QUESTIONS ── */
+  .q-block {
+    background: var(--teal);
+    border-radius: 16px;
+    padding: 36px 28px;
+    margin: 36px 0 80px;
+  }
+
+  .q-eyebrow {
+    font-family: var(--hand);
+    font-size: 16px;
+    color: rgba(255,255,255,0.65);
+    margin-bottom: 20px;
+  }
+
+  .q-item {
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    gap: 14px;
+    padding: 18px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    align-items: start;
+  }
+
+  .q-item:last-child { border-bottom: none; }
+
+  .q-num {
+    font-family: var(--hand);
+    font-size: 22px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.35);
+    line-height: 1.4;
+  }
+
+  .q-text {
+    font-family: var(--serif);
+    font-size: 17px;
+    font-style: italic;
+    color: #fff;
+    line-height: 1.55;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 28px 24px;
+    font-family: var(--hand);
+    font-size: 16px;
+    color: var(--ink-dim);
+    border-top: 1px solid var(--border);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 580px) {
+    .card-grid, .layers, .movement, .decision-grid { grid-template-columns: 1fr; }
+    .dash-row { grid-template-columns: 1fr auto; }
+    .dash-note { display: none; }
+    .sit-body { grid-template-columns: 1fr; }
+    .q-block { padding: 24px 18px; }
+    .hero { padding: 52px 20px 48px; }
+    .chapter { margin: 56px 0 22px; }
+    .content { padding: 0 18px; }
+  }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-meta">Fremtidsscenario · KLG</div>
+  <h1>Veien <span>inn</span></h1>
+  <p class="hero-sub">Det er det første styringsmøtet med et nytt felles bilde av reisen fra oppvekst til arbeid. Dere er ikke her for å bli orientert — dere er her for å prioritere.</p>
+  <div class="hero-facts">
+    <div class="fact">
+      <div class="fact-label">Dato</div>
+      <div class="fact-value">14.01.2028</div>
+    </div>
+    <div class="fact">
+      <div class="fact-label">Tid</div>
+      <div class="fact-value">08:30</div>
+    </div>
+    <div class="fact">
+      <div class="fact-label">Sted</div>
+      <div class="fact-value">KLG</div>
+    </div>
+  </div>
+</section>
+
+<div class="content">
+
+  <div class="chapter">
+    <span class="chapter-tag">📋 Situasjonen</span>
+    <div class="chapter-rule"></div>
+  </div>
+
+  <div class="prose">
+    <h2>På bordet ligger noe nytt</h2>
+    <p class="lead">For ett år siden innførte kommunen et felles styringssystem for arbeidet mot utenforskap. Målet var å komme bort fra enkelttiltak og løsrevne indikatorer — og i stedet se hele reisen fra oppvekst til arbeid samlet.</p>
+    <p>I dag får dere det første samlede styringsbildet: fire felles mål, et dashboard som viser hvor det trykker mest, og en bevegelsesmåling som viser om innsatsen faktisk flytter folk i riktig retning.</p>
+    <p>Noe ser ut til å virke. Noe gjør ikke det. Og noen politiske forventninger peker i en annen retning enn dashboardet. Oppgaven er ikke å løse alt — men å forstå hvor systemet trykker mest.</p>
+  </div>
+
+  <div class="chapter">
+    <span class="chapter-tag">🗺 Reisen</span>
+    <div class="chapter-rule"></div>
+  </div>
+
+  <div class="journey-scroll">
+    <div class="journey-track">
+      <div class="j-node">
+        <div class="j-dot warn">🏠</div>
+        <div class="j-label">Familie / oppvekst</div>
+        <div class="j-flag amber">⚑ utsatt</div>
+      </div>
+      <div class="j-node">
+        <div class="j-dot warn">🎒</div>
+        <div class="j-label">Barnehage / barneskole</div>
+        <div class="j-flag amber">tidlig fangst</div>
+      </div>
+      <div class="j-node">
+        <div class="j-dot alert">📉</div>
+        <div class="j-label">Ungdoms&shy;skole</div>
+        <div class="j-flag rust">⚑ knekkpunkt</div>
+      </div>
+      <div class="j-node">
+        <div class="j-dot alert">🚦</div>
+        <div class="j-label">VGS-overgang</div>
+        <div class="j-flag rust">⚑ røde flagg</div>
+      </div>
+      <div class="j-node">
+        <div class="j-dot warn">📋</div>
+        <div class="j-label">NAV / ung voksen</div>
+        <div class="j-flag amber">⚑ stagnasjon</div>
+      </div>
+      <div class="j-node">
+        <div class="j-dot ok">✓</div>
+        <div class="j-label">Arbeid / kvalifisering</div>
+        <div class="j-flag teal">fungerer</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chapter">
+    <span class="chapter-tag">🔍 Slik leses systemet</span>
+    <div class="chapter-rule"></div>
+  </div>
+
+  <div class="prose">
+    <h2>Tre lag — lest samlet</h2>
+    <p>Spørsmålet er ikke bare «hvor er risikoen?» — men også «skaper innsatsen vår faktisk bevegelse?»</p>
+  </div>
+
+  <div class="layers">
+    <div class="layer">
+      <div class="layer-icon">📊</div>
+      <div class="layer-title">Risiko&shy;indikatorer</div>
+      <ul class="layer-list">
+        <li>Lavinntekt</li>
+        <li>Foreldre uten arbeid</li>
+        <li>Lav utdanning</li>
+        <li>Ustabil bolig</li>
+        <li>Barnevernserfaring</li>
+      </ul>
+    </div>
+    <div class="layer">
+      <div class="layer-icon">🚩</div>
+      <div class="layer-title">Røde flagg — skole</div>
+      <ul class="layer-list">
+        <li>Fravær</li>
+        <li>Karakterfall</li>
+        <li>Ensomhet</li>
+        <li>Skolevegring</li>
+        <li>Søker ikke VGS</li>
+      </ul>
+    </div>
+    <div class="layer">
+      <div class="layer-icon">🧭</div>
+      <div class="layer-title">Bevegelse</div>
+      <ul class="layer-list">
+        <li>Uholdbar → Utsatt</li>
+        <li>Utsatt → Stabil</li>
+        <li>Stabil → Bærekraftig</li>
+        <li>Tilbakefall måles</li>
+        <li>Retning, ikke status</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="chapter">
+    <span class="chapter-tag">🎯 Fire mål</span>
+    <div class="chapter-rule"></div>
+  </div>
+
+  <div class="prose">
+    <h2>Enkle nok til å huskes</h2>
+    <p>Brede nok til å angå hele kommunen. Målene må virke <em>sammen</em> — tidlig oppdagelse og stabile familier skal bidra til skole, arbeid og varig deltakelse.</p>
+  </div>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-num">01</div>
+      <div class="card-title">Flere fullfører skoleløpet</div>
+      <div class="card-meta">Fravær · karakterfall · overgang til VGS · fullført og bestått</div>
+    </div>
+    <div class="card">
+      <div class="card-num">02</div>
+      <div class="card-title">Flere i arbeid, utdanning eller kvalifisering</div>
+      <div class="card-meta">Sosialhjelp · AAP · praksis · overgang til jobb eller skole</div>
+    </div>
+    <div class="card">
+      <div class="card-num">03</div>
+      <div class="card-title">Flere familier får en stabil hverdag</div>
+      <div class="card-meta">Bolig · økonomi · foreldres arbeid · samlet belastning</div>
+    </div>
+    <div class="card">
+      <div class="card-num">04</div>
+      <div class="card-title">Flere tidlige tegn oppdages og følges opp</div>
+      <div class="card-meta">Røde flagg · responstid · felles plan · ansvarlig kontakt</div>
+    </div>
+  </div>
+
+  <div class="chapter">
+    <span class="chapter-tag">↗ Bevegelseslogikken</span>
+    <div class="chapter-rule"></div>
+  </div>
+
+  <div class="prose">
+    <h2>Fra situasjon til endring</h2>
+    <p>Inspirert av Asker-logikken. Det avgjørende er ikke om en situasjon er registrert — <em>men om den beveger seg i riktig retning.</em></p>
+  </div>
+
+  <div class="movement">
+    <div class="m-step">
+      <div class="m-badge m-rust">Uholdbar</div>
+      <div class="m-title">Akutt</div>
+      <div class="m-desc">Uten bolig · alvorlig fravær · ingen ansvarlig tjeneste</div>
+    </div>
+    <div class="m-step">
+      <div class="m-badge m-amber">Utsatt</div>
+      <div class="m-title">Fungerer delvis</div>
+      <div class="m-desc">Lavinntekt · økende fravær · ingen felles plan</div>
+    </div>
+    <div class="m-step">
+      <div class="m-badge m-neutral">Stabil</div>
+      <div class="m-title">Håndterbar</div>
+      <div class="m-desc">Fast bolig · redusert fravær · ansvarlig kontakt</div>
+    </div>
+    <div class="m-step">
+      <div class="m-badge m-teal">Bærekraftig</div>
+      <div class="m-title">Fungerer</div>
+      <div class="m-desc">Robust nettverk · stabil deltakelse · lavt hjelpebehov</div>
+    </div>
+  </div>
+
+  <div class="chapter">
+    <span class="chapter-tag">📈 Dashboardet — 2028</span>
+    <div class="chapter-rule"></div>
+  </div>
+
+  <div class="prose">
+    <h2>Styringsbildet på bordet</h2>
+    <p class="lead">Systemet demper kriser — men klarer ikke godt nok å skape varig bevegelse mot stabil og bærekraftig deltakelse.</p>
+  </div>
+
+  <div class="dash">
+    <div class="dash-head">
+      <div class="dash-head-title">Veien inn — oversikt</div>
+    </div>
+    <div class="dash-row">
+      <div class="dash-journey">Familie / oppvekst</div>
+      <div class="dash-note">Mange løftes fra uholdbar til utsatt. Få videre til stabil.</div>
+      <span class="status-pill pill-yellow">Gul/rød</span>
+    </div>
+    <div class="dash-row">
+      <div class="dash-journey">Barnehage / barneskole</div>
+      <div class="dash-note">Flere bekymringer fanges tidlig. Felles vurdering og plan.</div>
+      <span class="status-pill pill-yellow">Gul</span>
+    </div>
+    <div class="dash-row">
+      <div class="dash-journey">Ungdomsskole</div>
+      <div class="dash-note">Fravær og karakterfall øker. Mange i utsatt situasjon.</div>
+      <span class="status-pill pill-red">Rød</span>
+    </div>
+    <div class="dash-row">
+      <div class="dash-journey">VGS-overgang</div>
+      <div class="dash-note">Flere søker ikke, møter ikke opp eller slutter tidlig.</div>
+      <span class="status-pill pill-red">Rød</span>
+    </div>
+    <div class="dash-row">
+      <div class="dash-journey">NAV / ung voksen</div>
+      <div class="dash-note">Flere unge får aktivitet, men mange uten progresjon.</div>
+      <span class="status-pill pill-yellow">Gul/rød</span>
+    </div>
+    <div class="dash-row">
+      <div class="dash-journey">Arbeid / kvalifisering</div>
+      <div class="dash-note">Flere arbeidsgivere tilbyr praksis. Flere går videre.</div>
+      <span class="status-pill pill-green">Grønn</span>
+    </div>
+  </div>
+
+  <div class="chapter">
+    <span class="chapter-tag">⚠ Situasjon 1</span>
+    <div class="chapter-rule"></div>
+  </div>
+
+  <div class="prose">
+    <h2>Ungdomsskole–VGS-glippen</h2>
+    <p>Røde flagg har vært synlige lenge — men bevegelsen uteblir akkurat idet ungdommene nærmer seg VGS. Er dette et skoleproblem — eller et systemproblem?</p>
+  </div>
+
+  <div class="sit-panel">
+    <div class="sit-top">
+      <div>
+        <div class="sit-top-label">Knekkpunkt</div>
+        <div class="sit-top-title">8.–10. trinn → VGS</div>
+      </div>
+      <span class="status-pill pill-red">Rød</span>
+    </div>
+    <div class="sit-body">
+      <div>
+        <div class="sit-flags">
+          <span class="flag-chip">⚑ fravær</span>
+          <span class="flag-chip">⚑ karakterfall</span>
+          <span class="flag-chip">⚑ skolevegring</span>
+          <span class="flag-chip">⚑ ikke VGS</span>
+        </div>
+        <ul class="sit-list">
+          <li>Bekymringsfullt fravær fra 8.–10. trinn øker</li>
+          <li>Fravær + lav mestring + karakterfall samvirker</li>
+          <li>Flere søker ikke VGS, møter ikke opp eller slutter tidlig</li>
+          <li>Tiltak kommer sent og er for skoleinterne</li>
+        </ul>
+      </div>
+      <div>
+        <div class="mov-col-title">Bevegelsesmåling</div>
+        <div class="mov-row">
+          <span></span><span class="mov-head">2027</span><span class="mov-head">2028</span>
+        </div>
+        <div class="mov-row">
+          <span class="mov-label">Uholdbar skolehverdag</span>
+          <span class="mov-num">28</span><span class="mov-num down">34</span>
+        </div>
+        <div class="mov-row">
+          <span class="mov-label">Utsatt skolehverdag</span>
+          <span class="mov-num">116</span><span class="mov-num down">142</span>
+        </div>
+        <div class="mov-row">
+          <span class="mov-label">Stabil skolehverdag</span>
+          <span class="mov-num">82</span><span class="mov-num up">76</span>
+        </div>
+        <div class="mov-row">
+          <span class="mov-label">Bærekraftig deltakelse</span>
+          <span class="mov-num">49</span><span class="mov-num up">45</span>
+        </div>
+        <p class="mov-note">Flere fanges opp — men færre beveger seg til stabil skolehverdag.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="chapter">
+    <span class="chapter-tag">⚠ Situasjon 2</span>
+    <div class="chapter-rule"></div>
+  </div>
+
+  <div class="prose">
+    <h2>Familier med sammensatt risiko</h2>
+    <p>Flere løftes ut av akutte kriser — men for mange blir stående i en utsatt hverdag som preger barnas skole og deltakelse. Investerer kommunen tidlig nok — og samlet nok?</p>
+  </div>
+
+  <div class="sit-panel">
+    <div class="sit-top">
+      <div>
+        <div class="sit-top-label">Mønster tidlig i reisen</div>
+        <div class="sit-top-title">Familie / oppvekst</div>
+      </div>
+      <span class="status-pill pill-yellow">Gul/rød</span>
+    </div>
+    <div class="sit-body">
+      <div>
+        <div class="sit-flags">
+          <span class="flag-chip amber">lavinntekt</span>
+          <span class="flag-chip amber">ustabil bolig</span>
+          <span class="flag-chip amber">svakt nettverk</span>
+          <span class="flag-chip">⚑ fravær</span>
+        </div>
+        <ul class="sit-list">
+          <li>Lavinntekt, trangboddhet eller ustabil bolig er utbredt</li>
+          <li>Noen i fare for utkastelse eller midlertidige løsninger</li>
+          <li>Foreldre med svak arbeidstilknytning og/eller helseutfordringer</li>
+          <li>Barn i disse familiene har oftere fravær og lav fritidsdeltakelse</li>
+        </ul>
+      </div>
+      <div>
+        <div class="mov-col-title">Bevegelsesmåling</div>
+        <div class="mov-row">
+          <span></span><span class="mov-head">2027</span><span class="mov-head">2028</span>
+        </div>
+        <div class="mov-row">
+          <span class="mov-label">Uholdbar familiesituasjon</span>
+          <span class="mov-num">44</span><span class="mov-num up">31</span>
+        </div>
+        <div class="mov-row">
+          <span class="mov-label">Utsatt familiesituasjon</span>
+          <span class="mov-num">108</span><span class="mov-num down">137</span>
+        </div>
+        <div class="mov-row">
+          <span class="mov-label">Stabil familiesituasjon</span>
+          <span class="mov-num">72</span><span class="mov-num up">84</span>
+        </div>
+        <div class="mov-row">
+          <span class="mov-label">Bærekraftig familiesituasjon</span>
+          <span class="mov-num">26</span><span class="mov-num up">29</span>
+        </div>
+        <p class="mov-note amber">Systemet demper akutt risiko — men skaper ikke nok varig stabilitet.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="chapter">
+    <span class="chapter-tag">🧭 Beslutningsbildet</span>
+    <div class="chapter-rule"></div>
+  </div>
+
+  <div class="prose">
+    <h2>Fire veivalg</h2>
+    <p>Alle kan forsvares. Ingen løser alt. Hva bør KLG prioritere?</p>
+  </div>
+
+  <div class="decision-grid">
+    <div class="d-card">
+      <div class="d-letter">A</div>
+      <div class="d-title">Forsterket overgang ungdomsskole–VGS</div>
+      <div class="d-desc">Tydeligere oppfølging før, under og etter VGS-start for ungdom med røde flagg.</div>
+      <div class="d-tension-label">Spenning</div>
+      <div class="d-tension">Treffer rødt knekkpunkt, men krever samarbeid med fylket og aktører utenfor kommunens linje.</div>
+    </div>
+    <div class="d-card">
+      <div class="d-letter">B</div>
+      <div class="d-title">Familieinvestering etter bevegelseslogikk</div>
+      <div class="d-desc">Samlet plan rundt bolig, økonomi, arbeid, helse og barns deltakelse.</div>
+      <div class="d-tension-label">Spenning</div>
+      <div class="d-tension">Kan forebygge tidlig, men effekten kommer later og er vanskeligere å isolere.</div>
+    </div>
+    <div class="d-card">
+      <div class="d-letter">C</div>
+      <div class="d-title">Én trygg voksen / koordinator</div>
+      <div class="d-desc">Langvarig relasjonell oppfølging for unge med flere røde flagg.</div>
+      <div class="d-tension-label">Spenning</div>
+      <div class="d-tension">Treffer relasjon og sammenheng, men krever kapasitet og utholdenhet.</div>
+    </div>
+    <div class="d-card political">
+      <div class="d-letter">D</div>
+      <div class="d-title">Politisk satsing: ettervern + arbeidspraksis</div>
+      <div class="d-desc">2 MNOK fra politikerne. Ettervern kobles med arbeidspraksis og tett oppfølging.</div>
+      <div class="d-tension-label">Spenning</div>
+      <div class="d-tension">Relevant og politisk ønsket — men treffer sent, der dashboardet allerede viser grønn utvikling.</div>
+    </div>
+  </div>
+
+  <div class="chapter">
+    <span class="chapter-tag">💬 Ledergruppens oppgave</span>
+    <div class="chapter-rule"></div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-eyebrow">Tre spørsmål å lande på</div>
+    <div class="q-item">
+      <span class="q-num">1</span>
+      <span class="q-text">Skal ressursene følge det politiske initiativet, de tydeligste røde målingene — eller den langsiktige forebyggingslogikken?</span>
+    </div>
+    <div class="q-item">
+      <span class="q-num">2</span>
+      <span class="q-text">Hvilken bevegelse må kommunen få til neste år?</span>
+    </div>
+    <div class="q-item">
+      <span class="q-num">3</span>
+      <span class="q-text">Hvilke to tiltak — og hvilket systemgrep — bør prioriteres først?</span>
+    </div>
+  </div>
+
+</div>
+
+<footer>Veien inn · Fremtidsscenario for KLG · Tønsbergløftet · 2028</footer>
+
+</body>
+</html>
