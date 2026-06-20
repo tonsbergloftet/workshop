@@ -323,9 +323,9 @@ html, body { height: 100%; overflow: hidden; }
 }
 .dash-head-title { font-family: var(--hand); font-size: 19px; font-weight: 600; color: var(--ink); }
 .dash-row {
-  display: grid; grid-template-columns: 140px 1fr auto;
-  gap: 12px; padding: 12px 20px;
-  border-bottom: 1px solid var(--border); align-items: center;
+  display: grid; grid-template-columns: 108px 1fr 160px auto;
+  gap: 12px; padding: 14px 20px;
+  border-bottom: 1px solid var(--border); align-items: start;
 }
 .dash-row:last-child { border-bottom: none; }
 .dash-journey { font-family: var(--serif); font-size: 13px; color: var(--ink); font-weight: 500; line-height: 1.35; }
@@ -810,6 +810,179 @@ html, body { height: 100%; overflow: hidden; }
 [data-bolk="bilde"]::before      { background: var(--c-bilde); }
 [data-bolk="beslutning"]::before { background: var(--c-beslutning); }
 
+
+/* ══ DESKTOP: PERMANENT SIDEBAR ══ */
+@media (min-width: 900px) {
+  .menu-toggle { display: none; }
+
+  .sidemenu {
+    transform: translateX(0) !important;
+    box-shadow: none !important;
+    border-right: 1px solid var(--border);
+    position: fixed;
+    width: 220px;
+  }
+
+  .menu-backdrop { display: none !important; }
+
+  /* Offset slides container so content isn't hidden behind sidebar */
+  .slides { margin-left: 220px; }
+
+  /* Nav dots hidden on desktop — sidebar is enough */
+  .nav-dots { display: none; }
+}
+
+
+/* ══ SLIDE 1: TASK BOX ══ */
+.s1-task {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-top: 20px;
+}
+.s1-task-label {
+  font-size: 9px; text-transform: uppercase;
+  letter-spacing: 0.14em; color: var(--ink-dim);
+  margin-bottom: 12px; font-family: var(--sans);
+}
+.s1-task-items { display: flex; flex-direction: column; gap: 10px; }
+.s1-task-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-family: var(--serif); font-size: 15px; color: var(--ink-mid);
+  line-height: 1.5;
+}
+.s1-task-item span { flex: 1; }
+
+/* ══ DASHBOARD QUESTIONS ══ */
+.dash-questions {
+  display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;
+}
+.dq-item {
+  flex: 1; min-width: 160px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex; align-items: flex-start; gap: 8px;
+}
+.dq-num {
+  font-family: var(--hand); font-size: 20px; font-weight: 700;
+  color: var(--teal); opacity: 0.4; line-height: 1; flex-shrink: 0;
+}
+.dq-text {
+  font-family: var(--serif); font-size: 12px; font-style: italic;
+  color: var(--ink-mid); line-height: 1.5;
+}
+
+/* ══ VEIVALG CONSEQUENCE ══ */
+.vv-consequence {
+  margin-top: 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.65;
+  font-family: var(--sans);
+}
+.vv-cons-label {
+  font-size: 9px; text-transform: uppercase;
+  letter-spacing: 0.12em; margin-bottom: 5px;
+  font-weight: 500; opacity: 0.7;
+}
+.vv-cons-red    { background: var(--rust-bg);  color: var(--rust); }
+.vv-cons-amber  { background: var(--amber-bg); color: var(--amber); }
+.vv-cons-teal   { background: var(--teal-bg);  color: var(--teal); }
+.vv-cons-yellow { background: #FDF8E8; color: #8A7010; }
+
+
+/* ══ DASHBOARD ENRICHED ══ */
+.dash-head-sub {
+  font-size: 11px; color: var(--ink-dim);
+  font-family: var(--sans); margin-top: 3px;
+}
+
+.dash-col-heads {
+  display: grid; grid-template-columns: 108px 1fr 160px auto;
+  gap: 12px; padding: 6px 20px 4px;
+  background: #F7F4EE;
+  border-bottom: 1px solid var(--border);
+}
+.dch {
+  font-size: 9px; text-transform: uppercase;
+  letter-spacing: 0.11em; color: var(--ink-dim);
+  font-family: var(--sans);
+}
+
+/* Movement bar */
+.dash-movement { padding-top: 2px; }
+
+.dm-bar {
+  display: flex; gap: 2px; height: 18px;
+  border-radius: 4px; overflow: hidden;
+  margin-bottom: 5px;
+}
+
+.dm-seg {
+  flex: 1; position: relative;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 2px;
+  transition: flex 0.3s ease;
+}
+
+/* Highlight growing/worsening segments */
+.dm-seg.dm-grow { flex: 1.6; }
+
+.dm-uholdbar { background: var(--rust-bg); }
+.dm-utsatt   { background: var(--amber-bg); }
+.dm-stabil   { background: #E0EEE8; }
+.dm-baer     { background: var(--teal-bg); }
+
+/* Arrows on growing bad segments */
+.dm-uholdbar.dm-grow,
+.dm-utsatt.dm-grow { position: relative; }
+.dm-uholdbar.dm-grow::after,
+.dm-utsatt.dm-grow::after {
+  content: "↑";
+  position: absolute; right: 3px; top: 0;
+  font-size: 9px; color: var(--rust); opacity: 0.6;
+}
+
+.dm-num {
+  font-family: var(--hand); font-size: 10px;
+  color: var(--ink-dim); white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis;
+  padding: 0 3px;
+}
+
+.dm-label {
+  font-size: 10px; color: var(--ink-dim);
+  font-style: italic; font-family: var(--serif);
+  line-height: 1.3;
+}
+.dm-warn { color: var(--rust); }
+.dm-good { color: var(--teal); }
+
+/* ══ VEIVALG: DESC in summary ══ */
+.vv-desc {
+  font-size: 12px; color: var(--ink-dim);
+  line-height: 1.5; margin-top: 4px;
+  font-family: var(--sans);
+}
+
+/* Responsive adjustments */
+@media (max-width: 700px) {
+  .dash-row, .dash-col-heads {
+    grid-template-columns: 90px 1fr auto;
+  }
+  .dash-movement { display: none; }
+  .dash-col-heads .dch:nth-child(3) { display: none; }
+}
+@media (max-width: 900px) {
+  .dash-row, .dash-col-heads {
+    grid-template-columns: 100px 1fr 120px auto;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -936,11 +1109,18 @@ html, body { height: 100%; overflow: hidden; }
 <!-- ══ 1: SYSTEMSKIFTET ══ -->
 <section class="slide" data-index="1" data-bolk="kontekst">
   <div class="slide-inner">
-    <div class="slide-tag">🔄 Systemskiftet</div>
-    <h2>Vi har sluttet å behandle utenforskap som summen av enkelttiltak</h2>
-    <p class="lead">I 2028 har kommunen bygget en felles rigg: tjenester som ser de samme signalene, jobber mot de samme målene og lærer av det som skjer på tvers.</p>
-    <div class="callout">Det handler ikke om mer innsats. Det handler om å koble innsatsen bedre — slik at barn, unge og familier slipper å være prosjektleder for eget liv.</div>
-    <p>Denne riggen ble ikke til over natten. Den ble til fordi ledelsen tok et bevisst valg om å styre på tvers — ikke bare følge opp innenfor egne sektorer.</p>
+    <div class="slide-tag anim-up">🔄 Systemskiftet</div>
+    <h2 class="anim-up delay-1">Vi har sluttet å behandle utenforskap som summen av enkelttiltak</h2>
+    <p class="lead anim-up delay-2">I 2028 har kommunen bygget en felles rigg: tjenester som ser de samme signalene, jobber mot de samme målene og lærer av det som skjer på tvers.</p>
+    <div class="callout anim-up delay-3">Det handler ikke om mer innsats. Det handler om å koble innsatsen bedre — slik at barn, unge og familier slipper å være prosjektleder for eget liv.</div>
+    <div class="s1-task anim-up delay-4">
+      <div class="s1-task-label">I dag skal dere</div>
+      <div class="s1-task-items">
+        <div class="s1-task-item">📖 <span>Lese styringsbildet slik det er tenkt brukt</span></div>
+        <div class="s1-task-item">⚖️ <span>Vurdere fem konkrete veivalg med reelle konsekvenser</span></div>
+        <div class="s1-task-item">✍️ <span>Prioritere på tvers — og beslutte hva som omprioriteres</span></div>
+      </div>
+    </div>
   </div>
   <button class="next-btn" onclick="goNext(1)">↓ Neste</button>
 </section>
@@ -1182,6 +1362,22 @@ html, body { height: 100%; overflow: hidden; }
     <div class="slide-tag">📈 Dashboardet — 2028</div>
     <h2>Styringsbildet på bordet</h2>
     <p class="lead">Systemet er bedre enn noe som har eksistert før. Men det demper kriser uten å skape varig bevegelse. Det er det dere skal ta stilling til nå.</p>
+
+    <div class="dash-questions">
+      <div class="dq-item">
+        <span class="dq-num">1</span>
+        <span class="dq-text">Hvor er utviklingen mest bekymringsfull?</span>
+      </div>
+      <div class="dq-item">
+        <span class="dq-num">2</span>
+        <span class="dq-text">Hvor ser vi positiv bevegelse?</span>
+      </div>
+      <div class="dq-item">
+        <span class="dq-num">3</span>
+        <span class="dq-text">Hvor er innsatsen aktiv — men uten nok progresjon?</span>
+      </div>
+    </div>
+
     <div class="dash">
       <div class="dash-head"><div class="dash-head-title">Veien inn — oversikt</div></div>
       <div class="dash-row" data-delay="0.05">
@@ -1252,10 +1448,10 @@ html, body { height: 100%; overflow: hidden; }
         <div class="sit-col">
           <div class="mov-title">Bevegelsesmåling</div>
           <div class="mov-row"><span></span><span class="mov-head">2027</span><span class="mov-head">2028</span></div>
-          <div class="mov-row"><span class="mov-label">Uholdbar skolehverdag</span><span class="mov-num" data-target="28">0</span><span class="mov-num down" data-target="34">0</span></div>
-          <div class="mov-row"><span class="mov-label">Utsatt skolehverdag</span><span class="mov-num" data-target="116">0</span><span class="mov-num down" data-target="142">0</span></div>
-          <div class="mov-row"><span class="mov-label">Stabil skolehverdag</span><span class="mov-num" data-target="82">0</span><span class="mov-num up" data-target="76">0</span></div>
-          <div class="mov-row"><span class="mov-label">Bærekraftig deltakelse</span><span class="mov-num" data-target="49">0</span><span class="mov-num up" data-target="45">0</span></div>
+          <div class="mov-row"><span class="mov-label">Uholdbar skolehverdag</span><span class="mov-num" data-target="28">28</span><span class="mov-num down" data-target="34">34</span></div>
+          <div class="mov-row"><span class="mov-label">Utsatt skolehverdag</span><span class="mov-num" data-target="116">116</span><span class="mov-num down" data-target="142">142</span></div>
+          <div class="mov-row"><span class="mov-label">Stabil skolehverdag</span><span class="mov-num" data-target="82">82</span><span class="mov-num up" data-target="76">76</span></div>
+          <div class="mov-row"><span class="mov-label">Bærekraftig deltakelse</span><span class="mov-num" data-target="49">49</span><span class="mov-num up" data-target="45">45</span></div>
           <p class="mov-note">Flere fanges opp — men færre beveger seg til stabil skolehverdag.</p>
         </div>
       </div>
@@ -1297,10 +1493,10 @@ html, body { height: 100%; overflow: hidden; }
         <div class="sit-col">
           <div class="mov-title">Bevegelsesmåling</div>
           <div class="mov-row"><span></span><span class="mov-head">2027</span><span class="mov-head">2028</span></div>
-          <div class="mov-row"><span class="mov-label">Uholdbar familiesituasjon</span><span class="mov-num" data-target="44">0</span><span class="mov-num up" data-target="31">0</span></div>
-          <div class="mov-row"><span class="mov-label">Utsatt familiesituasjon</span><span class="mov-num" data-target="108">0</span><span class="mov-num down" data-target="137">0</span></div>
-          <div class="mov-row"><span class="mov-label">Stabil familiesituasjon</span><span class="mov-num" data-target="72">0</span><span class="mov-num up" data-target="84">0</span></div>
-          <div class="mov-row"><span class="mov-label">Bærekraftig familiesituasjon</span><span class="mov-num" data-target="26">0</span><span class="mov-num up" data-target="29">0</span></div>
+          <div class="mov-row"><span class="mov-label">Uholdbar familiesituasjon</span><span class="mov-num" data-target="44">44</span><span class="mov-num up" data-target="31">31</span></div>
+          <div class="mov-row"><span class="mov-label">Utsatt familiesituasjon</span><span class="mov-num" data-target="108">108</span><span class="mov-num down" data-target="137">137</span></div>
+          <div class="mov-row"><span class="mov-label">Stabil familiesituasjon</span><span class="mov-num" data-target="72">72</span><span class="mov-num up" data-target="84">84</span></div>
+          <div class="mov-row"><span class="mov-label">Bærekraftig familiesituasjon</span><span class="mov-num" data-target="26">26</span><span class="mov-num up" data-target="29">29</span></div>
           <p class="mov-note amber">Systemet demper akutt risiko — men skaper ikke nok varig stabilitet.</p>
         </div>
       </div>
@@ -1318,6 +1514,7 @@ html, body { height: 100%; overflow: hidden; }
 
     <div class="vv-list">
 
+      <!-- ── 1 ── -->
       <div class="vv-card" onclick="toggleVV(this)">
         <div class="vv-summary">
           <div class="vv-left">
@@ -1325,6 +1522,7 @@ html, body { height: 100%; overflow: hidden; }
             <div>
               <div class="vv-name">Nærværsløftet 8–10</div>
               <div class="vv-tagline">Mer kapasitet til fraværsarbeid på ungdomstrinnet</div>
+              <div class="vv-desc">Kommunen har allerede fraværsteam og kompetanse. Forslaget er å forsterke med mer kapasitet til rask kartlegging og tettere oppfølging av elever med bekymringsfullt fravær.</div>
             </div>
           </div>
           <div class="vv-right">
@@ -1347,9 +1545,14 @@ html, body { height: 100%; overflow: hidden; }
               </div>
             </div>
           </div>
+          <div class="vv-consequence vv-cons-amber">
+            <div class="vv-cons-label">Ressurskonsekvens</div>
+            ~1,5 årsverk fra skole og helse · Innebærer utvidet mandat for fraværsteamet · Avklaring nødvendig: skoletiltak eller tverrsektoriell innsats?
+          </div>
         </div>
       </div>
 
+      <!-- ── 2 ── -->
       <div class="vv-card" onclick="toggleVV(this)">
         <div class="vv-summary">
           <div class="vv-left">
@@ -1357,6 +1560,7 @@ html, body { height: 100%; overflow: hidden; }
             <div>
               <div class="vv-name">Overgangsgarantien 10. trinn–VGS</div>
               <div class="vv-tagline">Ansvarlig voksen gjennom overgangen fra ungdomsskole til VGS</div>
+              <div class="vv-desc">Elever med røde flagg identifiseres tidligere, følges gjennom sommeren og får en ansvarlig kontakt til de er etablert i VGS, arbeidstrening eller kvalifisering.</div>
             </div>
           </div>
           <div class="vv-right">
@@ -1379,9 +1583,14 @@ html, body { height: 100%; overflow: hidden; }
               </div>
             </div>
           </div>
+          <div class="vv-consequence vv-cons-red">
+            <div class="vv-cons-label">Ressurskonsekvens</div>
+            ~2 årsverk koordinator · Krever formelt samarbeid med fylkeskommunen · Starter for sent hvis ikke koblet med nærværsarbeid i 8–9. trinn
+          </div>
         </div>
       </div>
 
+      <!-- ── 3 ── -->
       <div class="vv-card" onclick="toggleVV(this)">
         <div class="vv-summary">
           <div class="vv-left">
@@ -1389,6 +1598,7 @@ html, body { height: 100%; overflow: hidden; }
             <div>
               <div class="vv-name">Familiepakken Stabil Hverdag</div>
               <div class="vv-tagline">Samlet innsats rundt familier med sammensatt risiko</div>
+              <div class="vv-desc">En samlet innsats der bolig, økonomi, arbeid, skole og helse kobles rundt familier med sammensatt risiko som står i fare for langvarig utenforskap.</div>
             </div>
           </div>
           <div class="vv-right">
@@ -1411,9 +1621,14 @@ html, body { height: 100%; overflow: hidden; }
               </div>
             </div>
           </div>
+          <div class="vv-consequence vv-cons-amber">
+            <div class="vv-cons-label">Ressurskonsekvens</div>
+            3–4 mill. fordelt på NAV, bolig og helse · Felles plan på tvers av tjenester · Effekten kommer sent og er vanskelig å isolere
+          </div>
         </div>
       </div>
 
+      <!-- ── 4 ── -->
       <div class="vv-card" onclick="toggleVV(this)">
         <div class="vv-summary">
           <div class="vv-left">
@@ -1421,6 +1636,7 @@ html, body { height: 100%; overflow: hidden; }
             <div>
               <div class="vv-name">Jobbsporet 16–24</div>
               <div class="vv-tagline">Partnerskap med arbeidsgivere for unge utenfor skole og arbeid</div>
+              <div class="vv-desc">Partnerskap med lokale arbeidsgivere: raskere tilgang til praksis, arbeidstrening og deltidsjobb — med tett oppfølging fra kommunen og arbeidsgiver.</div>
             </div>
           </div>
           <div class="vv-right">
@@ -1443,9 +1659,14 @@ html, body { height: 100%; overflow: hidden; }
               </div>
             </div>
           </div>
+          <div class="vv-consequence vv-cons-teal">
+            <div class="vv-cons-label">Ressurskonsekvens</div>
+            ~1,5 mill. + NAV-ressurser · Avhengig av arbeidsgiverpartnere · Treffer unge som allerede har falt ut — ikke knekkpunktet dashboardet peker på
+          </div>
         </div>
       </div>
 
+      <!-- ── 5 ── -->
       <div class="vv-card vv-political" onclick="toggleVV(this)">
         <div class="vv-summary">
           <div class="vv-left">
@@ -1453,6 +1674,7 @@ html, body { height: 100%; overflow: hidden; }
             <div>
               <div class="vv-name">Fritid for Alle — politisk vedtatt</div>
               <div class="vv-tagline">Flere barn i organiserte fritidsaktiviteter, uavhengig av økonomi</div>
+              <div class="vv-desc">Politisk vedtatt satsing: flere barn og unge skal delta i organiserte fritidsaktiviteter, uavhengig av familiens økonomi.</div>
             </div>
           </div>
           <div class="vv-right">
@@ -1474,6 +1696,10 @@ html, body { height: 100%; overflow: hidden; }
                 Skal politisk vedtatte enkeltsatsinger styres inn i felles mål, dashboard og bevegelsesmåling — eller akseptere at gode tiltak lever på siden av den felles riggen?
               </div>
             </div>
+          </div>
+          <div class="vv-consequence vv-cons-amber">
+            <div class="vv-cons-label">Ressurskonsekvens</div>
+            Politisk vedtatt — midler allerede satt av · Spørsmålet er ikke om, men hvordan · Risiko: treffer ikke de mest utsatte uten aktiv kobling til riggen
           </div>
         </div>
       </div>
