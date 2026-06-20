@@ -563,30 +563,363 @@ html, body { height: 100%; overflow: hidden; }
   .vv-tagline { display: none; }
 }
 
+
+/* ══ SCROLLYTELLING ══ */
+
+/* Fade-up for generic elements */
+.anim-up {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+.anim-up.visible { opacity: 1; transform: translateY(0); }
+
+/* Stagger delays */
+.delay-1 { transition-delay: 0.1s; }
+.delay-2 { transition-delay: 0.22s; }
+.delay-3 { transition-delay: 0.34s; }
+.delay-4 { transition-delay: 0.46s; }
+.delay-5 { transition-delay: 0.58s; }
+
+/* ── SLIDE 1: Fragmented services ── */
+.frag-wrap { margin: 24px 0 0; }
+.frag-services {
+  display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px;
+}
+.frag-pill {
+  font-family: var(--serif);
+  font-size: 14px; font-style: italic;
+  padding: 8px 16px;
+  border-radius: 30px;
+  border: 1px solid var(--border);
+  background: var(--white);
+  color: var(--ink-mid);
+  opacity: 0;
+  transform: translateY(10px) scale(0.96);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.frag-pill.visible { opacity: 1; transform: translateY(0) scale(1); }
+.frag-but {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.5s ease 0.7s, transform 0.5s ease 0.7s;
+  font-family: var(--serif);
+  font-size: 16px; font-style: italic;
+  color: var(--rust);
+  padding-left: 4px;
+}
+.frag-but.visible { opacity: 1; transform: translateY(0); }
+
+/* ── SLIDE 5: System flow step-in ── */
+.sf-block, .sf-arrow {
+  opacity: 0;
+  transform: translateX(-12px);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+.sf-block.visible, .sf-arrow.visible {
+  opacity: 1; transform: translateX(0);
+}
+.sf-caption {
+  opacity: 0;
+  font-size: 13px; color: var(--ink-dim);
+  font-style: italic; font-family: var(--serif);
+  margin-top: 12px;
+  transition: opacity 0.5s ease 0.9s;
+}
+.sf-caption.visible { opacity: 1; }
+
+/* ── SLIDE 8: Dashboard rows fade in ── */
+.dash-row {
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.dash-row.visible { opacity: 1; transform: translateX(0); }
+
+/* ── SLIDES 9 & 10: Count-up numbers ── */
+.mov-num[data-target] { transition: color 0.3s; }
+
+/* ── Moving dot on bevegelse line ── */
+.movement-dot {
+  position: absolute;
+  top: -5px; left: 0%;
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--rust);
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 2px var(--rust);
+  transition: left 1.4s cubic-bezier(0.4,0,0.2,1),
+              background 1.4s ease,
+              box-shadow 1.4s ease;
+  z-index: 2;
+}
+.slide.in-view .movement-dot {
+  left: calc(100% - 12px);
+  background: var(--teal);
+  box-shadow: 0 0 0 2px var(--teal);
+}
+
+
+/* ══ COLOUR TOKENS PER BOLK ══ */
+:root {
+  --c-kontekst:   #4A7FA5;
+  --c-rigg:       #2E7B5A;
+  --c-bilde:      #A07020;
+  --c-beslutning: #9A3020;
+}
+
+/* ══ HAMBURGER ══ */
+.menu-toggle {
+  position: fixed;
+  top: 18px; left: 18px;
+  z-index: 300;
+  background: rgba(255,255,255,0.92);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  width: 42px; height: 42px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 5px; cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: box-shadow 0.2s;
+  padding: 0;
+}
+.menu-toggle:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.12); }
+.menu-toggle span {
+  display: block; width: 18px; height: 1.5px;
+  background: var(--ink); border-radius: 2px;
+  transition: transform 0.25s, opacity 0.25s;
+}
+.menu-open .menu-toggle span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.menu-open .menu-toggle span:nth-child(2) { opacity: 0; }
+.menu-open .menu-toggle span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+/* ══ SIDE MENU ══ */
+.sidemenu {
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  width: 260px;
+  background: var(--white);
+  border-right: 1px solid var(--border);
+  z-index: 200;
+  transform: translateX(-100%);
+  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  box-shadow: 4px 0 24px rgba(0,0,0,0);
+}
+.menu-open .sidemenu {
+  transform: translateX(0);
+  box-shadow: 4px 0 24px rgba(0,0,0,0.12);
+}
+
+.sidemenu-inner { padding: 68px 0 32px; }
+
+/* ══ BOLKER ══ */
+.sm-bolk { margin-bottom: 4px; }
+
+.sm-bolk-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 20px 6px;
+}
+
+.sm-bolk-dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+}
+
+.sm-bolk-name {
+  font-size: 10px; text-transform: uppercase;
+  letter-spacing: 0.13em; font-weight: 500;
+  color: var(--ink-dim); font-family: var(--sans);
+}
+
+/* Bolk colours */
+[data-bolk="kontekst"]   .sm-bolk-dot { background: var(--c-kontekst); }
+[data-bolk="rigg"]       .sm-bolk-dot { background: var(--c-rigg); }
+[data-bolk="bilde"]      .sm-bolk-dot { background: var(--c-bilde); }
+[data-bolk="beslutning"] .sm-bolk-dot { background: var(--c-beslutning); }
+
+[data-bolk="kontekst"]   .sm-bolk-name { color: var(--c-kontekst); }
+[data-bolk="rigg"]       .sm-bolk-name { color: var(--c-rigg); }
+[data-bolk="bilde"]      .sm-bolk-name { color: var(--c-bilde); }
+[data-bolk="beslutning"] .sm-bolk-name { color: var(--c-beslutning); }
+
+/* ══ MENU ITEMS ══ */
+.sm-item {
+  display: flex; align-items: center; gap: 10px;
+  width: 100%; padding: 9px 20px 9px 20px;
+  background: none; border: none; cursor: pointer;
+  font-family: var(--sans); font-size: 13px;
+  color: var(--ink-mid); text-align: left;
+  transition: background 0.15s, color 0.15s;
+  border-radius: 0;
+}
+.sm-item:hover { background: var(--bg); color: var(--ink); }
+
+.sm-item.active { color: var(--ink); font-weight: 500; }
+
+[data-bolk="kontekst"]   .sm-item.active { background: rgba(74,127,165,0.08); border-left: 3px solid var(--c-kontekst); padding-left: 17px; }
+[data-bolk="rigg"]       .sm-item.active { background: rgba(46,123,90,0.08);  border-left: 3px solid var(--c-rigg);       padding-left: 17px; }
+[data-bolk="bilde"]      .sm-item.active { background: rgba(160,112,32,0.08); border-left: 3px solid var(--c-bilde);      padding-left: 17px; }
+[data-bolk="beslutning"] .sm-item.active { background: rgba(154,48,32,0.08);  border-left: 3px solid var(--c-beslutning); padding-left: 17px; }
+
+.sm-num {
+  font-family: var(--hand); font-size: 15px; font-weight: 600;
+  color: var(--border); min-width: 24px;
+  transition: color 0.15s;
+}
+.sm-item.active .sm-num,
+.sm-item:hover  .sm-num { color: inherit; opacity: 0.5; }
+
+/* Divider between bolker */
+.sm-bolk + .sm-bolk { border-top: 1px solid var(--border); padding-top: 4px; }
+
+/* ══ BACKDROP ══ */
+.menu-backdrop {
+  position: fixed; inset: 0; z-index: 150;
+  background: rgba(26,20,16,0.3);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s;
+  backdrop-filter: blur(2px);
+}
+.menu-open .menu-backdrop { opacity: 1; pointer-events: all; }
+
+/* ══ DOT NAV — colour coded ══ */
+.nd-gap { height: 6px; }
+
+.nd-kontekst   { background: rgba(74,127,165,0.25); }
+.nd-rigg       { background: rgba(46,123,90,0.25); }
+.nd-bilde      { background: rgba(160,112,32,0.25); }
+.nd-beslutning { background: rgba(154,48,32,0.25); }
+
+.nd-kontekst.active,   .nd-kontekst:hover   { background: var(--c-kontekst); }
+.nd-rigg.active,       .nd-rigg:hover       { background: var(--c-rigg); }
+.nd-bilde.active,      .nd-bilde:hover      { background: var(--c-bilde); }
+.nd-beslutning.active, .nd-beslutning:hover { background: var(--c-beslutning); }
+
+/* ══ SLIDE BOLK INDICATOR (top left accent line) ══ */
+.slide::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  transition: background 0.4s;
+}
+[data-bolk="kontekst"]::before   { background: var(--c-kontekst); }
+[data-bolk="rigg"]::before       { background: var(--c-rigg); }
+[data-bolk="bilde"]::before      { background: var(--c-bilde); }
+[data-bolk="beslutning"]::before { background: var(--c-beslutning); }
+
 </style>
 </head>
 <body>
 
-<nav class="nav-dots">
-  <button class="nav-dot active" data-slide="0"><span class="nav-dot-tooltip">Forside</span></button>
-  <button class="nav-dot" data-slide="1"><span class="nav-dot-tooltip">Systemskiftet</span></button>
-  <button class="nav-dot" data-slide="2"><span class="nav-dot-tooltip">Problemet i dag</span></button>
-  <button class="nav-dot" data-slide="3"><span class="nav-dot-tooltip">Fire mål</span></button>
-  <button class="nav-dot" data-slide="4"><span class="nav-dot-tooltip">Reisen</span></button>
-  <button class="nav-dot" data-slide="5"><span class="nav-dot-tooltip">Den nye riggen</span></button>
-  <button class="nav-dot" data-slide="6"><span class="nav-dot-tooltip">Bevegelse</span></button>
-  <button class="nav-dot" data-slide="7"><span class="nav-dot-tooltip">Tre nivåer</span></button>
-  <button class="nav-dot" data-slide="8"><span class="nav-dot-tooltip">Dashboard</span></button>
-  <button class="nav-dot" data-slide="9"><span class="nav-dot-tooltip">Situasjon 1</span></button>
-  <button class="nav-dot" data-slide="10"><span class="nav-dot-tooltip">Situasjon 2</span></button>
-  <button class="nav-dot" data-slide="11"><span class="nav-dot-tooltip">Beslutning</span></button>
-  <button class="nav-dot" data-slide="12"><span class="nav-dot-tooltip">Hva KLG må eie</span></button>
+<!-- HAMBURGER -->
+<button class="menu-toggle" id="menuToggle" onclick="toggleMenu()" aria-label="Meny">
+  <span></span><span></span><span></span>
+</button>
+
+<!-- SIDE MENU -->
+<nav class="sidemenu" id="sidemenu">
+  <div class="sidemenu-inner">
+
+    <div class="sm-bolk" data-bolk="kontekst">
+      <div class="sm-bolk-header">
+        <span class="sm-bolk-dot"></span>
+        <span class="sm-bolk-name">Kontekst</span>
+      </div>
+      <button class="sm-item active" data-slide="0" onclick="navTo(0)">
+        <span class="sm-num">00</span>Forside
+      </button>
+      <button class="sm-item" data-slide="1" onclick="navTo(1)">
+        <span class="sm-num">01</span>Systemskiftet
+      </button>
+      <button class="sm-item" data-slide="2" onclick="navTo(2)">
+        <span class="sm-num">02</span>Problemet i dag
+      </button>
+    </div>
+
+    <div class="sm-bolk" data-bolk="rigg">
+      <div class="sm-bolk-header">
+        <span class="sm-bolk-dot"></span>
+        <span class="sm-bolk-name">Riggen</span>
+      </div>
+      <button class="sm-item" data-slide="3" onclick="navTo(3)">
+        <span class="sm-num">03</span>Fire felles mål
+      </button>
+      <button class="sm-item" data-slide="4" onclick="navTo(4)">
+        <span class="sm-num">04</span>Reisen
+      </button>
+      <button class="sm-item" data-slide="5" onclick="navTo(5)">
+        <span class="sm-num">05</span>Den nye riggen
+      </button>
+      <button class="sm-item" data-slide="6" onclick="navTo(6)">
+        <span class="sm-num">06</span>Bevegelseslogikken
+      </button>
+      <button class="sm-item" data-slide="7" onclick="navTo(7)">
+        <span class="sm-num">07</span>Tre nivåer
+      </button>
+    </div>
+
+    <div class="sm-bolk" data-bolk="bilde">
+      <div class="sm-bolk-header">
+        <span class="sm-bolk-dot"></span>
+        <span class="sm-bolk-name">Bildet i 2028</span>
+      </div>
+      <button class="sm-item" data-slide="8" onclick="navTo(8)">
+        <span class="sm-num">08</span>Dashboardet
+      </button>
+      <button class="sm-item" data-slide="9" onclick="navTo(9)">
+        <span class="sm-num">09</span>Ungdomsskole–VGS
+      </button>
+      <button class="sm-item" data-slide="10" onclick="navTo(10)">
+        <span class="sm-num">10</span>Familier med risiko
+      </button>
+    </div>
+
+    <div class="sm-bolk" data-bolk="beslutning">
+      <div class="sm-bolk-header">
+        <span class="sm-bolk-dot"></span>
+        <span class="sm-bolk-name">Beslutning</span>
+      </div>
+      <button class="sm-item" data-slide="11" onclick="navTo(11)">
+        <span class="sm-num">11</span>Fem veivalg
+      </button>
+      <button class="sm-item" data-slide="12" onclick="navTo(12)">
+        <span class="sm-num">12</span>Hva KLG må eie
+      </button>
+    </div>
+
+  </div>
+</nav>
+
+<!-- BACKDROP -->
+<div class="menu-backdrop" id="menuBackdrop" onclick="toggleMenu()"></div>
+
+<!-- COMPACT DOT NAV (right side, colour-coded) -->
+<nav class="nav-dots" aria-label="Navigasjon">
+  <button class="nav-dot nd-kontekst active" data-slide="0"><span class="nav-dot-tooltip">Forside</span></button>
+  <button class="nav-dot nd-kontekst" data-slide="1"><span class="nav-dot-tooltip">Systemskiftet</span></button>
+  <button class="nav-dot nd-kontekst" data-slide="2"><span class="nav-dot-tooltip">Problemet i dag</span></button>
+  <div class="nd-gap"></div>
+  <button class="nav-dot nd-rigg" data-slide="3"><span class="nav-dot-tooltip">Fire mål</span></button>
+  <button class="nav-dot nd-rigg" data-slide="4"><span class="nav-dot-tooltip">Reisen</span></button>
+  <button class="nav-dot nd-rigg" data-slide="5"><span class="nav-dot-tooltip">Den nye riggen</span></button>
+  <button class="nav-dot nd-rigg" data-slide="6"><span class="nav-dot-tooltip">Bevegelseslogikken</span></button>
+  <button class="nav-dot nd-rigg" data-slide="7"><span class="nav-dot-tooltip">Tre nivåer</span></button>
+  <div class="nd-gap"></div>
+  <button class="nav-dot nd-bilde" data-slide="8"><span class="nav-dot-tooltip">Dashboardet</span></button>
+  <button class="nav-dot nd-bilde" data-slide="9"><span class="nav-dot-tooltip">Ungdomsskole–VGS</span></button>
+  <button class="nav-dot nd-bilde" data-slide="10"><span class="nav-dot-tooltip">Familier med risiko</span></button>
+  <div class="nd-gap"></div>
+  <button class="nav-dot nd-beslutning" data-slide="11"><span class="nav-dot-tooltip">Fem veivalg</span></button>
+  <button class="nav-dot nd-beslutning" data-slide="12"><span class="nav-dot-tooltip">Hva KLG må eie</span></button>
 </nav>
 
 <div class="slides" id="slides">
 
 <!-- ══ 0: HERO ══ -->
-<section class="slide" data-index="0" style="background:#fff;">
+<section class="slide" data-index="0" data-bolk="kontekst" style="background:#fff;">
   <div class="slide-inner" style="align-items:center;text-align:center;">
     <div class="hero-kicker">Fremtidsscenario · KLG</div>
     <h1 style="font-family:var(--hand);font-size:clamp(60px,13vw,108px);font-weight:700;color:var(--ink);line-height:1.0;margin-bottom:16px;">Veien <span style="color:var(--teal);">inn</span></h1>
@@ -601,7 +934,7 @@ html, body { height: 100%; overflow: hidden; }
 </section>
 
 <!-- ══ 1: SYSTEMSKIFTET ══ -->
-<section class="slide" data-index="1">
+<section class="slide" data-index="1" data-bolk="kontekst">
   <div class="slide-inner">
     <div class="slide-tag">🔄 Systemskiftet</div>
     <h2>Vi har sluttet å behandle utenforskap som summen av enkelttiltak</h2>
@@ -613,13 +946,23 @@ html, body { height: 100%; overflow: hidden; }
 </section>
 
 <!-- ══ 2: PROBLEMET I DAG ══ -->
-<section class="slide" data-index="2">
+<section class="slide" data-index="2" data-bolk="kontekst">
   <div class="slide-inner">
-    <div class="slide-tag">🧩 Problemet — ikke mangel på innsats</div>
-    <h2>Mange gjør mye godt.<br>Men ikke alltid sammen.</h2>
-    <p class="lead">Skolen ser fravær. NAV ser ytelser. Helse ser belastning. Barnevernet ser familieforhold. Alle har rett i det de ser — men ingen ser hele bildet.</p>
-    <div class="three-col">
-      <div class="col-card">
+    <div class="slide-tag anim-up">🧩 Problemet — ikke mangel på innsats</div>
+    <h2 class="anim-up delay-1">Mange gjør mye godt.<br>Men ikke alltid sammen.</h2>
+
+    <div class="frag-wrap">
+      <div class="frag-services">
+        <span class="frag-pill" data-delay="0.05">👁 Skolen ser fravær</span>
+        <span class="frag-pill" data-delay="0.22">🏥 NAV ser ytelser</span>
+        <span class="frag-pill" data-delay="0.39">🩺 Helse ser belastning</span>
+        <span class="frag-pill" data-delay="0.56">🏠 Barnevernet ser familieforhold</span>
+      </div>
+      <p class="frag-but">— men ingen ser hele bildet.</p>
+    </div>
+
+    <div class="three-col" style="margin-top:20px;">
+      <div class="col-card anim-up delay-2">
         <div class="col-icon">👁</div>
         <div class="col-title">Skolen oppdager</div>
         <ul class="col-list">
@@ -628,7 +971,7 @@ html, body { height: 100%; overflow: hidden; }
           <li>Manglende deltakelse</li>
         </ul>
       </div>
-      <div class="col-card">
+      <div class="col-card anim-up delay-3">
         <div class="col-icon">🏥</div>
         <div class="col-title">Helse og NAV oppdager</div>
         <ul class="col-list">
@@ -637,7 +980,7 @@ html, body { height: 100%; overflow: hidden; }
           <li>Svak arbeidstilknytning</li>
         </ul>
       </div>
-      <div class="col-card">
+      <div class="col-card anim-up delay-4">
         <div class="col-icon">🏠</div>
         <div class="col-title">Familie og bolig</div>
         <ul class="col-list">
@@ -647,13 +990,13 @@ html, body { height: 100%; overflow: hidden; }
         </ul>
       </div>
     </div>
-    <div class="callout" style="margin-top:16px;">Resultatet er ikke mangel på tiltak — men tilfeldigheter i hvem som oppdager, hvem som kobler og hvem som følger opp.</div>
+    <div class="callout anim-up delay-5" style="margin-top:16px;">Resultatet er ikke mangel på tiltak — men tilfeldigheter i hvem som oppdager, hvem som kobler og hvem som følger opp.</div>
   </div>
   <button class="next-btn" onclick="goNext(2)">↓ Neste</button>
 </section>
 
 <!-- ══ 3: FIRE MÅL ══ -->
-<section class="slide" data-index="3">
+<section class="slide" data-index="3" data-bolk="rigg">
   <div class="slide-inner">
     <div class="slide-tag">🎯 Fire felles mål</div>
     <h2>Enkle nok til å huskes</h2>
@@ -697,7 +1040,7 @@ html, body { height: 100%; overflow: hidden; }
 </section>
 
 <!-- ══ 4: REISEN ══ -->
-<section class="slide" data-index="4">
+<section class="slide" data-index="4" data-bolk="rigg">
   <div class="slide-inner">
     <div class="slide-tag">🗺 Reisen</div>
     <h2>Fra oppvekst til arbeid</h2>
@@ -710,14 +1053,14 @@ html, body { height: 100%; overflow: hidden; }
 </section>
 
 <!-- ══ 5: DEN NYE RIGGEN ══ -->
-<section class="slide" data-index="5">
+<section class="slide" data-index="5" data-bolk="rigg">
   <div class="slide-inner">
     <div class="slide-tag">⚙ Den nye riggen</div>
     <h2>Slik virker systemet</h2>
     <p>Kommunen bruker tre typer kunnskap samlet. Risikoindikatorer og røde flagg er ikke separate lister — de er signaler som mates inn i en felles vurdering av hvor en familie eller ungdom befinner seg akkurat nå.</p>
     <div class="system-model">
       <div class="system-flow">
-        <div class="sf-block">
+        <div class="sf-block" data-delay="0.05">
           <div class="sf-label">Signal 1 · Bakgrunn</div>
           <div class="sf-title">Risiko&shy;indikatorer</div>
           <div class="sf-chips">
@@ -727,8 +1070,8 @@ html, body { height: 100%; overflow: hidden; }
             <span class="sf-chip">Barnevern&shy;erfaring</span>
           </div>
         </div>
-        <div class="sf-arrow">+</div>
-        <div class="sf-block">
+        <div class="sf-arrow" data-delay="0.3">+</div>
+        <div class="sf-block" data-delay="0.4">
           <div class="sf-label">Signal 2 · Observasjon</div>
           <div class="sf-title">Røde flagg</div>
           <div class="sf-chips">
@@ -738,8 +1081,8 @@ html, body { height: 100%; overflow: hidden; }
             <span class="sf-chip rust">Søker ikke VGS</span>
           </div>
         </div>
-        <div class="sf-arrow">→</div>
-        <div class="sf-block">
+        <div class="sf-arrow" data-delay="0.65">→</div>
+        <div class="sf-block" data-delay="0.75">
           <div class="sf-label">Samlet vurdering</div>
           <div class="sf-title">Bevegelse</div>
           <div class="sf-chips">
@@ -750,20 +1093,23 @@ html, body { height: 100%; overflow: hidden; }
           </div>
         </div>
       </div>
-      <p style="font-size:13px;color:var(--ink-dim);font-style:italic;font-family:var(--serif);">Spørsmålet er ikke bare «hvor er risikoen?» — men «beveger situasjonen seg i riktig retning?»</p>
+      <p class="sf-caption">Spørsmålet er ikke bare «hvor er risikoen?» — men «beveger situasjonen seg i riktig retning?»</p>
     </div>
   </div>
   <button class="next-btn" onclick="goNext(5)">↓ Neste</button>
 </section>
 
 <!-- ══ 6: BEVEGELSE ══ -->
-<section class="slide" data-index="6">
+<section class="slide" data-index="6" data-bolk="rigg">
   <div class="slide-inner">
     <div class="slide-tag">↗ Bevegelseslogikken</div>
     <h2>Fra situasjon til endring</h2>
     <p>Inspirert av Asker-logikken. Poenget er ikke å telle tiltak — men å se om situasjonen faktisk <em>beveger seg</em> mot en mer bærekraftig hverdag.</p>
     <div class="movement-track">
-      <div class="movement-spine"><div class="movement-fill"></div></div>
+      <div class="movement-spine">
+        <div class="movement-fill"></div>
+        <div class="movement-dot"></div>
+      </div>
       <div class="movement-steps">
         <div class="m-step">
           <div class="m-dot m-dot-rust"></div>
@@ -801,7 +1147,7 @@ html, body { height: 100%; overflow: hidden; }
 </section>
 
 <!-- ══ 7: TRE NIVÅER ══ -->
-<section class="slide" data-index="7">
+<section class="slide" data-index="7" data-bolk="rigg">
   <div class="slide-inner">
     <div class="slide-tag">👥 Hva endrer seg</div>
     <h2>Systemet virker på tre nivåer</h2>
@@ -831,39 +1177,39 @@ html, body { height: 100%; overflow: hidden; }
 </section>
 
 <!-- ══ 8: DASHBOARD ══ -->
-<section class="slide" data-index="8">
+<section class="slide" data-index="8" data-bolk="bilde">
   <div class="slide-inner">
     <div class="slide-tag">📈 Dashboardet — 2028</div>
     <h2>Styringsbildet på bordet</h2>
     <p class="lead">Systemet er bedre enn noe som har eksistert før. Men det demper kriser uten å skape varig bevegelse. Det er det dere skal ta stilling til nå.</p>
     <div class="dash">
       <div class="dash-head"><div class="dash-head-title">Veien inn — oversikt</div></div>
-      <div class="dash-row">
+      <div class="dash-row" data-delay="0.05">
         <div class="dash-journey">Familie / oppvekst</div>
         <div class="dash-note">Mange løftes fra uholdbar til utsatt. Få videre til stabil.</div>
         <span class="status-tag tag-yellow">Krise dempet,<br>lite varig endring</span>
       </div>
-      <div class="dash-row">
+      <div class="dash-row" data-delay="0.18">
         <div class="dash-journey">Barnehage / barneskole</div>
         <div class="dash-note">Flere bekymringer fanges tidlig. Felles vurdering og plan.</div>
         <span class="status-tag tag-yellow">Bedring,<br>men skjørt</span>
       </div>
-      <div class="dash-row">
+      <div class="dash-row" data-delay="0.31">
         <div class="dash-journey">Ungdomsskole</div>
         <div class="dash-note">Fravær og karakterfall øker. Mange i utsatt situasjon.</div>
         <span class="status-tag tag-red">Feil retning —<br>knekkpunkt</span>
       </div>
-      <div class="dash-row">
+      <div class="dash-row" data-delay="0.44">
         <div class="dash-journey">VGS-overgang</div>
         <div class="dash-note">Flere søker ikke, møter ikke opp eller slutter tidlig.</div>
         <span class="status-tag tag-red">Svak overgang —<br>mange faller av</span>
       </div>
-      <div class="dash-row">
+      <div class="dash-row" data-delay="0.57">
         <div class="dash-journey">NAV / ung voksen</div>
         <div class="dash-note">Flere unge får aktivitet, men mange uten progresjon.</div>
         <span class="status-tag tag-yellow">Aktivisert,<br>ikke kvalifisert</span>
       </div>
-      <div class="dash-row">
+      <div class="dash-row" data-delay="0.70">
         <div class="dash-journey">Arbeid / kvalifisering</div>
         <div class="dash-note">Flere arbeidsgivere tilbyr praksis. Flere går videre.</div>
         <span class="status-tag tag-green">Fungerer —<br>god bevegelse</span>
@@ -874,7 +1220,7 @@ html, body { height: 100%; overflow: hidden; }
 </section>
 
 <!-- ══ 9: SITUASJON 1 ══ -->
-<section class="slide" data-index="9">
+<section class="slide" data-index="9" data-bolk="bilde">
   <div class="slide-inner">
     <div class="slide-tag">⚠ Situasjon 1</div>
     <h2>Ungdomsskole–VGS-glippen</h2>
@@ -906,10 +1252,10 @@ html, body { height: 100%; overflow: hidden; }
         <div class="sit-col">
           <div class="mov-title">Bevegelsesmåling</div>
           <div class="mov-row"><span></span><span class="mov-head">2027</span><span class="mov-head">2028</span></div>
-          <div class="mov-row"><span class="mov-label">Uholdbar skolehverdag</span><span class="mov-num">28</span><span class="mov-num down">34</span></div>
-          <div class="mov-row"><span class="mov-label">Utsatt skolehverdag</span><span class="mov-num">116</span><span class="mov-num down">142</span></div>
-          <div class="mov-row"><span class="mov-label">Stabil skolehverdag</span><span class="mov-num">82</span><span class="mov-num up">76</span></div>
-          <div class="mov-row"><span class="mov-label">Bærekraftig deltakelse</span><span class="mov-num">49</span><span class="mov-num up">45</span></div>
+          <div class="mov-row"><span class="mov-label">Uholdbar skolehverdag</span><span class="mov-num" data-target="28">0</span><span class="mov-num down" data-target="34">0</span></div>
+          <div class="mov-row"><span class="mov-label">Utsatt skolehverdag</span><span class="mov-num" data-target="116">0</span><span class="mov-num down" data-target="142">0</span></div>
+          <div class="mov-row"><span class="mov-label">Stabil skolehverdag</span><span class="mov-num" data-target="82">0</span><span class="mov-num up" data-target="76">0</span></div>
+          <div class="mov-row"><span class="mov-label">Bærekraftig deltakelse</span><span class="mov-num" data-target="49">0</span><span class="mov-num up" data-target="45">0</span></div>
           <p class="mov-note">Flere fanges opp — men færre beveger seg til stabil skolehverdag.</p>
         </div>
       </div>
@@ -919,7 +1265,7 @@ html, body { height: 100%; overflow: hidden; }
 </section>
 
 <!-- ══ 10: SITUASJON 2 ══ -->
-<section class="slide" data-index="10">
+<section class="slide" data-index="10" data-bolk="bilde">
   <div class="slide-inner">
     <div class="slide-tag">⚠ Situasjon 2</div>
     <h2>Familier med sammensatt risiko</h2>
@@ -951,10 +1297,10 @@ html, body { height: 100%; overflow: hidden; }
         <div class="sit-col">
           <div class="mov-title">Bevegelsesmåling</div>
           <div class="mov-row"><span></span><span class="mov-head">2027</span><span class="mov-head">2028</span></div>
-          <div class="mov-row"><span class="mov-label">Uholdbar familiesituasjon</span><span class="mov-num">44</span><span class="mov-num up">31</span></div>
-          <div class="mov-row"><span class="mov-label">Utsatt familiesituasjon</span><span class="mov-num">108</span><span class="mov-num down">137</span></div>
-          <div class="mov-row"><span class="mov-label">Stabil familiesituasjon</span><span class="mov-num">72</span><span class="mov-num up">84</span></div>
-          <div class="mov-row"><span class="mov-label">Bærekraftig familiesituasjon</span><span class="mov-num">26</span><span class="mov-num up">29</span></div>
+          <div class="mov-row"><span class="mov-label">Uholdbar familiesituasjon</span><span class="mov-num" data-target="44">0</span><span class="mov-num up" data-target="31">0</span></div>
+          <div class="mov-row"><span class="mov-label">Utsatt familiesituasjon</span><span class="mov-num" data-target="108">0</span><span class="mov-num down" data-target="137">0</span></div>
+          <div class="mov-row"><span class="mov-label">Stabil familiesituasjon</span><span class="mov-num" data-target="72">0</span><span class="mov-num up" data-target="84">0</span></div>
+          <div class="mov-row"><span class="mov-label">Bærekraftig familiesituasjon</span><span class="mov-num" data-target="26">0</span><span class="mov-num up" data-target="29">0</span></div>
           <p class="mov-note amber">Systemet demper akutt risiko — men skaper ikke nok varig stabilitet.</p>
         </div>
       </div>
@@ -964,7 +1310,7 @@ html, body { height: 100%; overflow: hidden; }
 </section>
 
 <!-- ══ 11: BESLUTNING ══ -->
-<section class="slide" data-index="11" style="min-height:100vh;scroll-snap-align:start;">
+<section class="slide" data-index="11" data-bolk="beslutning" style="min-height:100vh;scroll-snap-align:start;">
   <div class="slide-inner" style="justify-content:flex-start;padding-top:52px;">
     <div class="slide-tag">🧭 Beslutningsbildet</div>
     <h2>Fem veivalg</h2>
@@ -1143,7 +1489,7 @@ html, body { height: 100%; overflow: hidden; }
 </section>
 
 <!-- ══ 12: HVA KLG MÅ EIE ══ -->
-<section class="slide" data-index="12">
+<section class="slide" data-index="12" data-bolk="beslutning">
   <div class="slide-inner">
     <div class="slide-tag">💬 Hva KLG må eie</div>
     <h2>Dette er ikke en rapport.<br>Det er en rigg dere leder.</h2>
@@ -1199,6 +1545,16 @@ dots.forEach(dot => {
   });
 });
 
+function navTo(idx) {
+  slideEls[idx]?.scrollIntoView({ behavior: "smooth" });
+  // close menu after a short delay so user sees the transition
+  setTimeout(() => { document.body.classList.remove("menu-open"); }, 280);
+}
+
+function toggleMenu() {
+  document.body.classList.toggle("menu-open");
+}
+
 function goNext(current) {
   slideEls[current + 1]?.scrollIntoView({ behavior: "smooth" });
 }
@@ -1209,11 +1565,69 @@ const observer = new IntersectionObserver(entries => {
       const idx = parseInt(entry.target.dataset.index);
       dots.forEach((d, i) => d.classList.toggle("active", i === idx));
       entry.target.classList.add("in-view");
+      // sync sidemenu
+      document.querySelectorAll(".sm-item").forEach(item => {
+        item.classList.toggle("active", parseInt(item.dataset.slide) === idx);
+      });
     }
   });
 }, { threshold: 0.5 });
 
 slideEls.forEach(s => observer.observe(s));
+
+// ── SCROLLYTELLING OBSERVER ──
+const animObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    const slide = entry.target;
+    const idx = parseInt(slide.dataset.index);
+
+    // Generic anim-up elements
+    slide.querySelectorAll(".anim-up").forEach(el => {
+      el.classList.add("visible");
+    });
+
+    // Fragment pills (slide 2)
+    slide.querySelectorAll(".frag-pill").forEach(el => {
+      const delay = parseFloat(el.dataset.delay || 0);
+      setTimeout(() => el.classList.add("visible"), delay * 1000);
+    });
+    const fragBut = slide.querySelector(".frag-but");
+    if (fragBut) fragBut.classList.add("visible");
+
+    // System flow blocks (slide 5)
+    slide.querySelectorAll(".sf-block, .sf-arrow").forEach(el => {
+      const delay = parseFloat(el.dataset.delay || 0);
+      setTimeout(() => el.classList.add("visible"), delay * 1000);
+    });
+    const sfCap = slide.querySelector(".sf-caption");
+    if (sfCap) sfCap.classList.add("visible");
+
+    // Dashboard rows (slide 8)
+    slide.querySelectorAll(".dash-row").forEach(el => {
+      const delay = parseFloat(el.dataset.delay || 0);
+      setTimeout(() => el.classList.add("visible"), delay * 1000);
+    });
+
+    // Count-up numbers (slides 9 & 10)
+    slide.querySelectorAll(".mov-num[data-target]").forEach(el => {
+      const target = parseInt(el.dataset.target);
+      const duration = 900;
+      const start = performance.now();
+      function tick(now) {
+        const progress = Math.min((now - start) / duration, 1);
+        const ease = 1 - Math.pow(1 - progress, 3);
+        el.textContent = Math.round(ease * target);
+        if (progress < 1) requestAnimationFrame(tick);
+      }
+      setTimeout(() => requestAnimationFrame(tick), 200);
+    });
+
+    animObserver.unobserve(slide);
+  });
+}, { threshold: 0.45 });
+
+slideEls.forEach(s => animObserver.observe(s));
 
 function toggleVV(card) {
   const isOpen = card.classList.contains("open");
