@@ -45,13 +45,15 @@ html, body { height: 100%; overflow: hidden; }
 .slides {
   height: 100vh;
   overflow-y: scroll;
-  scroll-snap-type: y mandatory;
+  scroll-snap-type: y proximity;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: none;
 }
 
 .slide {
   scroll-snap-align: start;
+  scroll-snap-stop: normal;
   min-height: 100vh;
   position: relative;
   display: flex;
@@ -533,6 +535,71 @@ html, body { height: 100%; overflow: hidden; }
 @media (min-width: 601px) and (max-width: 899px) {
   .dash-row, .dash-col-heads { grid-template-columns: 100px 1fr 120px auto; }
 }
+
+/* ══ LONG SLIDES: reduced padding so more fits ══ */
+
+/* Veivalg-slide og siste slide har mye innhold — stram inn */
+[data-index="11"] .slide-inner,
+[data-index="12"] .slide-inner {
+  justify-content: flex-start;
+  padding-top: 44px;
+  padding-bottom: 96px;
+}
+
+[data-index="11"] .slide h2,
+[data-index="12"] .slide h2 {
+  font-size: clamp(24px, 3.5vw, 36px);
+  margin-bottom: 12px;
+}
+
+[data-index="11"] .slide p,
+[data-index="12"] .slide p {
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+/* Kompakt veivalg-liste */
+[data-index="11"] .vv-list { margin-top: 12px; gap: 6px; }
+[data-index="11"] .vv-summary { padding: 11px 16px; }
+[data-index="11"] .vv-name { font-size: 13px; }
+[data-index="11"] .vv-tagline { display: none; }
+[data-index="11"] .vv-desc { font-size: 11px; }
+[data-index="11"] .vv-letter { font-size: 24px; width: 26px; }
+
+/* Kompakt siste slide */
+[data-index="12"] .own-grid { gap: 8px; margin-top: 14px; }
+[data-index="12"] .own-card { padding: 14px; }
+[data-index="12"] .own-title { font-size: 13px; margin-bottom: 5px; }
+[data-index="12"] .own-desc { font-size: 11px; }
+[data-index="12"] .q-block { padding: 20px 22px; margin-top: 14px; }
+[data-index="12"] .q-item { padding: 12px 0; }
+[data-index="12"] .q-text { font-size: 14px; }
+
+/* Dashboard-slide: litt tettere */
+[data-index="8"] .slide-inner { justify-content: flex-start; padding-top: 44px; }
+[data-index="8"] .slide h2 { font-size: clamp(22px, 3vw, 32px); margin-bottom: 10px; }
+[data-index="8"] .dash { margin-top: 12px; }
+[data-index="8"] .dash-row { padding: 10px 16px; }
+[data-index="8"] .dash-questions { margin-bottom: 10px; }
+[data-index="8"] .dq-item { padding: 9px 12px; }
+
+/* Situasjoner: kompakt */
+[data-index="9"] .slide-inner,
+[data-index="10"] .slide-inner { justify-content: flex-start; padding-top: 44px; }
+[data-index="9"] .slide h2,
+[data-index="10"] .slide h2 { font-size: clamp(24px, 3.5vw, 36px); margin-bottom: 10px; }
+
+/* ══ SCROLL HINT: subtle indicator when slide has more content below ══ */
+.has-more::after {
+  content: '';
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 60px;
+  background: linear-gradient(to top, rgba(247,248,249,0.9), transparent);
+  pointer-events: none;
+  z-index: 9;
+}
+
 </style>
 </head>
 <body>
