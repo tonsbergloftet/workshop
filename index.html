@@ -216,10 +216,17 @@ html, body { height: 100%; overflow: hidden; }
   background: rgba(255,255,255,0.08);
   backdrop-filter: blur(8px);
 }
+.hero-date {
+  min-width: 310px;
+  padding: 20px 34px 22px;
+  text-align: center;
+}
 .fact { padding: 14px 24px; border-right: 1px solid rgba(197,218,175,0.25); text-align: center; }
 .fact:last-child { border-right: none; }
 .fact-label { font-size: 9px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--sage); margin-bottom: 5px; font-weight: 600; }
 .fact-value { font-family: var(--serif); font-size: 18px; font-weight: 700; color: var(--white); }
+.hero-date .fact-label { font-size: 11px; letter-spacing: 0.22em; margin-bottom: 8px; }
+.hero-date .fact-value { font-size: clamp(32px, 4.8vw, 54px); line-height: 1; }
 .slide-hero .next-btn { background: rgba(197,218,175,0.2); border-color: rgba(197,218,175,0.4); color: var(--sage); }
 .slide-hero .next-btn:hover { background: var(--sage); color: var(--navy); border-color: var(--sage); }
 
@@ -696,10 +703,9 @@ html, body { height: 100%; overflow: hidden; }
 <div class="hero-kicker">Fremtidsscenario · KLG</div>
 <h1 style="font-family:var(--serif);font-size:clamp(56px,12vw,104px);font-weight:800;color:var(--white);line-height:1.0;margin-bottom:8px;">Veien <span class="hand" style="font-family:var(--hand);font-weight:400;color:var(--sage);display:block;font-size:0.85em;line-height:1.1;">inn</span></h1>
 <p class="hero-sub" style="color:#ffffff !important;max-width:480px;line-height:1.65;margin-bottom:36px;">Det er det første styringsmøtet med et nytt felles bilde av reisen fra oppvekst til arbeid. Dere er ikke her for å bli orientert — dere er her for å prioritere.</p>
-<div class="hero-facts">
-<div class="fact"><div class="fact-label">Dato</div><div class="fact-value">14.01.2028</div></div>
-<div class="fact"><div class="fact-label">Tid</div><div class="fact-value">08:30</div></div>
-<div class="fact"><div class="fact-label">Sted</div><div class="fact-value">KLG</div></div>
+<div class="hero-facts hero-date">
+<div class="fact-label">Dato</div>
+<div class="fact-value">14.01.2028</div>
 </div>
 </div>
 <button class="next-btn" onclick="goNext(0)">↓ Begynn</button>
@@ -949,19 +955,40 @@ function goNext(current) {
   slideEls[current + 1]?.scrollIntoView({ behavior: "smooth" });
 }
 
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
-      const idx = parseInt(entry.target.dataset.index);
-      dots.forEach((d, i) => d.classList.toggle("active", i === idx));
-      entry.target.classList.add("in-view");
-      // sync sidemenu
-      document.querySelectorAll(".sm-item").forEach(item => {
-        item.classList.toggle("active", parseInt(item.dataset.slide) === idx);
-      });
+function updateActiveNav() {
+  const viewportCenter = slidesEl.scrollTop + (slidesEl.clientHeight / 2);
+  let activeIdx = 0;
+  let closest = Infinity;
+
+  slideEls.forEach((slide, i) => {
+    const slideCenter = slide.offsetTop + (slide.offsetHeight / 2);
+    const distance = Math.abs(slideCenter - viewportCenter);
+    if (distance < closest) {
+      closest = distance;
+      activeIdx = i;
     }
   });
-}, { threshold: 0.5 });
+
+  dots.forEach(dot => {
+    dot.classList.toggle("active", parseInt(dot.dataset.slide) === activeIdx);
+  });
+
+  document.querySelectorAll(".sm-item").forEach(item => {
+    item.classList.toggle("active", parseInt(item.dataset.slide) === activeIdx);
+  });
+}
+
+slidesEl.addEventListener("scroll", () => window.requestAnimationFrame(updateActiveNav), { passive: true });
+window.addEventListener("resize", updateActiveNav);
+window.addEventListener("load", updateActiveNav);
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("in-view");
+    }
+  });
+}, { threshold: 0.25 });
 
 slideEls.forEach(s => observer.observe(s));
 
