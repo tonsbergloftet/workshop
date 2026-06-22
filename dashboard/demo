@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Utenforskapsriggen – Tønsberg Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400&family=Square+Peg&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{color-scheme:only light}
+:root{
+  --navy:#013952;--navy-bg:#e8eff3;
+  --sage:#c5daaf;--sage-bg:#f0f5ea;--sage-dark:#7a9e5f;
+  --rust:#923c3d;--rust-bg:#f3e4e4;
+  --amber:#f1be48;--amber-bg:#fdf5dc;
+  --sky:#91cef2;--sky-bg:#e8f5fd;
+  --green:#00714e;--green-bg:#e0f2ec;
+  --white:#ffffff;--bg:#f7f8f9;
+  --ink:#1a1a1a;--ink-mid:#3d3d3d;--ink-dim:#666666;
+  --border:rgba(1,57,82,0.12);
+  --serif:"Barlow",system-ui,sans-serif;
+  --hand:"Square Peg",cursive;
+}
+body{font-family:var(--serif);background:var(--bg);color:var(--ink);min-height:100vh}
+
+/* ── TOPBAR (kompakt) ── */
+.topbar{
+  background:var(--navy);
+  padding:16px 22px 14px;
+  position:relative;overflow:hidden;
+}
+.topbar::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:40px;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 40' preserveAspectRatio='none'%3E%3Cpath fill='%23c5daaf' fill-opacity='0.15' d='M0,24 C360,40 720,8 1080,22 C1260,30 1360,12 1440,20 L1440,40 L0,40 Z'/%3E%3C/svg%3E")
+  center bottom/100% 100% no-repeat;
+  pointer-events:none;
+}
+.topbar-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;position:relative;z-index:2}
+.topbar-left .kicker{font-size:9px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:var(--sage);margin-bottom:3px}
+.topbar-left h1{font-family:var(--serif);font-size:clamp(22px,4vw,32px);font-weight:800;color:var(--white);line-height:1}
+.topbar-left h1 span{font-family:var(--hand);font-weight:400;color:var(--sage);font-size:0.7em;margin-left:8px;opacity:.85}
+.legend{display:flex;gap:14px;flex-wrap:wrap;padding-top:2px}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:10px;color:rgba(255,255,255,.7)}
+
+/* stat pills */
+.topbar-stats{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;position:relative;z-index:2}
+.tstat{padding:7px 14px;border:1px solid rgba(197,218,175,.25);border-radius:10px;background:rgba(255,255,255,.06)}
+.tstat-label{font-size:8px;text-transform:uppercase;letter-spacing:.14em;color:var(--sage);margin-bottom:2px;font-weight:600}
+.tstat-value{font-size:14px;font-weight:700;color:var(--white)}
+
+/* ── MAIN ── */
+.main{padding:14px 18px 36px;max-width:1060px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+
+.slide-tag{font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--navy);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.slide-tag::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--amber);flex-shrink:0}
+
+.card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:16px 18px}
+
+/* ── JOURNEY (kompakt, ingen sirkel) ── */
+.journey-scroll{overflow-x:auto;padding-bottom:4px}
+.journey-track{
+  display:flex;align-items:flex-end;
+  min-width:480px;position:relative;padding-top:12px;
+}
+.journey-track::before{
+  content:'';position:absolute;top:36px;left:24px;right:24px;
+  border-top:1.5px dashed rgba(1,57,82,.18);z-index:0;
+}
+.jstop{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;
+  position:relative;z-index:1;cursor:pointer;
+  transition:transform .15s;padding:0 2px;border-radius:10px;outline:none;
+}
+.jstop:hover{transform:translateY(-3px)}
+.jstop:focus-visible{box-shadow:0 0 0 2px var(--amber)}
+.jstop.active .sbox{border-color:var(--navy);background:var(--navy-bg)}
+.sflag{height:22px;display:flex;align-items:flex-end;justify-content:center}
+.sbox{
+  width:46px;height:46px;background:var(--bg);
+  border:1px solid var(--border);border-radius:12px;
+  display:flex;align-items:center;justify-content:center;font-size:20px;
+  transition:border-color .15s,background .15s;
+}
+.jstop:hover .sbox{border-color:rgba(1,57,82,.3)}
+.slabel{font-size:8.5px;font-weight:600;text-align:center;color:var(--navy);line-height:1.3;max-width:54px}
+.jend{display:flex;align-items:center;padding-bottom:24px;color:var(--ink-dim);font-size:16px;font-weight:300}
+
+/* ── DETAIL PANEL ── */
+.detail-panel{
+  display:none;background:var(--navy);border-radius:16px;
+  padding:18px 20px;position:relative;
+  animation:pIn .18s ease;
+}
+.detail-panel.open{display:block}
+@keyframes pIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.pclos{
+  position:absolute;top:14px;right:16px;
+  background:rgba(255,255,255,.1);border:none;color:var(--white);
+  width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:16px;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .15s;
+}
+.pclos:hover{background:rgba(255,255,255,.2)}
+.peyebrow{font-size:8px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(197,218,175,.75);margin-bottom:5px}
+.phead{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;margin-bottom:14px}
+.ptitle{font-family:var(--serif);font-size:18px;font-weight:800;color:var(--white)}
+.ptag{font-size:9px;font-weight:600;padding:3px 9px;border-radius:20px;letter-spacing:.04em}
+.tag-rust{background:rgba(146,60,61,.55);color:#f5c4c4}
+.tag-amber{background:rgba(241,190,72,.22);color:#f5d98a}
+.tag-green{background:rgba(0,113,78,.38);color:#8ee8c8}
+
+.pstat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:7px;margin-bottom:14px}
+.pstat{background:rgba(255,255,255,.07);border-radius:10px;padding:9px 11px}
+.pstat-label{font-size:8px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(197,218,175,.65);margin-bottom:3px}
+.pstat-val{font-family:var(--serif);font-size:22px;font-weight:800;line-height:1;color:var(--white)}
+.pstat-val.rust{color:#f4a0a0}.pstat-val.amber{color:#f5d070}.pstat-val.green{color:#7de8c4}.pstat-val.sky{color:#a8d8f0}
+.pstat-delta{font-size:9px;margin-top:2px}
+.d-neg{color:#f4a0a0}.d-pos{color:#7de8c4}
+
+.siglabel{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:rgba(197,218,175,.65);margin-bottom:6px}
+.siglist{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+.sigrow{display:flex;align-items:flex-start;gap:7px;font-size:11px;color:rgba(255,255,255,.82);line-height:1.45;font-weight:300}
+.sdot{width:6px;height:6px;border-radius:50%;margin-top:4px;flex-shrink:0}
+.sd-rust{background:#f4a0a0}.sd-amber{background:#f5d070}.sd-green{background:#7de8c4}
+.pdesc{font-size:11px;font-style:italic;color:rgba(255,255,255,.55);line-height:1.65;border-top:1px solid rgba(255,255,255,.1);padding-top:10px;font-weight:300}
+
+/* ── BEVEGELSE ── */
+.move-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
+.mcard{
+  background:var(--rust-bg);border:1px solid rgba(146,60,61,.16);
+  border-radius:14px;padding:12px 10px;
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  text-align:center;cursor:pointer;
+  transition:box-shadow .15s,transform .15s;
+}
+.mcard.pos{background:var(--green-bg);border-color:rgba(0,113,78,.16)}
+.mcard:hover{box-shadow:0 4px 14px rgba(1,57,82,.1);transform:translateY(-2px)}
+.mcard-route{font-size:8.5px;font-weight:600;color:var(--navy);line-height:1.3}
+.mcard-icon{font-size:17px;margin:3px 0 1px}
+.mcard-num{font-family:var(--serif);font-size:30px;font-weight:800;color:var(--navy);line-height:1}
+.mcard-delta{font-size:11px;font-weight:700}
+.mcard-delta.neg{color:var(--rust)}.mcard-delta.pos{color:var(--green)}
+.mcard-period{font-size:8px;color:var(--ink-dim);margin-top:1px}
+
+/* ── BOTTOM GRID ── */
+.bottom-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.bcard{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:16px 18px}
+.bcard h3{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--navy);margin-bottom:2px}
+.bdesc{font-size:10px;color:var(--ink-dim);margin-bottom:10px;font-weight:300}
+.neet-big{font-family:var(--serif);font-size:34px;font-weight:800;color:var(--navy);line-height:1;margin-bottom:2px}
+.neet-delta{font-size:12px;font-weight:700;color:var(--rust);margin-bottom:8px}
+.spark{width:100%;height:56px}
+
+.alert-list{display:flex;flex-direction:column;gap:8px}
+.alert-row{display:flex;align-items:flex-start;gap:6px;font-size:11px;line-height:1.4;color:var(--ink-mid);font-weight:300}
+
+.top4-list{display:flex;flex-direction:column;gap:8px}
+.top4-row{display:flex;align-items:flex-start;gap:7px;font-size:11px;line-height:1.4;color:var(--ink-mid);font-weight:300}
+.t4n{font-family:var(--hand);font-size:20px;color:var(--navy);opacity:.45;min-width:18px;line-height:1.1}
+
+.status-rows{display:flex;flex-direction:column}
+.srow{display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid var(--border);font-size:10px}
+.srow:last-child{border-bottom:none}
+.sroute{font-weight:600;color:var(--navy);min-width:100px;font-size:9.5px;line-height:1.3}
+.sdesc{flex:1;color:var(--ink-dim);font-size:9.5px;font-weight:300}
+.stag{font-size:8.5px;font-weight:600;padding:2px 7px;border-radius:20px;white-space:nowrap}
+.stag-r{background:var(--rust-bg);color:var(--rust)}
+.stag-y{background:var(--amber-bg);color:#7a5900}
+.stag-g{background:var(--green-bg);color:var(--green)}
+
+@media(max-width:600px){
+  .topbar{padding:12px 16px 12px}
+  .main{padding:10px 12px 28px}
+  .topbar-stats{gap:6px}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-row">
+    <div class="topbar-left">
+      <div class="kicker">Utenforskapsriggen · Tønsberg kommune</div>
+      <h1>Dashboard <span>2028</span></h1>
+    </div>
+    <div class="legend">
+      <div class="legend-item">
+        <svg width="13" height="15" viewBox="0 0 13 15"><line x1="2" y1="1" x2="2" y2="14" stroke="rgba(197,218,175,.45)" stroke-width="1.5"/><polygon points="2,1 12,5 2,9" fill="#923c3d"/></svg>Høy risiko
+      </div>
+      <div class="legend-item">
+        <svg width="13" height="15" viewBox="0 0 13 15"><line x1="2" y1="1" x2="2" y2="14" stroke="rgba(197,218,175,.45)" stroke-width="1.5"/><polygon points="2,1 12,5 2,9" fill="#f1be48"/></svg>Moderat
+      </div>
+      <div class="legend-item">
+        <svg width="13" height="15" viewBox="0 0 13 15"><line x1="2" y1="1" x2="2" y2="14" stroke="rgba(197,218,175,.45)" stroke-width="1.5"/><polygon points="2,1 12,5 2,9" fill="rgba(197,218,175,.75)"/></svg>Lav risiko
+      </div>
+    </div>
+  </div>
+  <div class="topbar-stats">
+    <div class="tstat"><div class="tstat-label">NEET totalt</div><div class="tstat-value">1 057</div></div>
+    <div class="tstat"><div class="tstat-label">Forflytninger</div><div class="tstat-value">102</div></div>
+    <div class="tstat"><div class="tstat-label">Røde flagg</div><div class="tstat-value">2</div></div>
+    <div class="tstat"><div class="tstat-label">Oppdatert</div><div class="tstat-value">jan. 2028</div></div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- REISEN -->
+  <div class="card">
+    <div class="slide-tag">Reisen – fra tidlige tegn til innenforskap</div>
+    <div class="journey-scroll">
+      <div class="journey-track" role="list" aria-label="Reisens stoppesteder">
+
+        <div class="jstop" role="listitem" tabindex="0" data-id="0" onclick="openStop(0)" onkeydown="if(event.key==='Enter'||event.key===' ')openStop(0)">
+          <div class="sflag"><svg width="14" height="20" viewBox="0 0 14 20"><line x1="2" y1="1" x2="2" y2="19" stroke="rgba(1,57,82,.2)" stroke-width="1.5"/><polygon points="2,1 13,5.5 2,10" fill="#923c3d"/></svg></div>
+          <div class="sbox">🏥</div><div class="slabel">Helse­stasjon</div>
+        </div>
+
+        <div class="jstop" role="listitem" tabindex="0" data-id="1" onclick="openStop(1)" onkeydown="if(event.key==='Enter'||event.key===' ')openStop(1)">
+          <div class="sflag"><svg width="14" height="20" viewBox="0 0 14 20"><line x1="2" y1="1" x2="2" y2="19" stroke="rgba(1,57,82,.2)" stroke-width="1.5"/><polygon points="2,1 13,5.5 2,10" fill="#f1be48"/></svg></div>
+          <div class="sbox">🏫</div><div class="slabel">Barnehage</div>
+        </div>
+
+        <div class="jstop" role="listitem" tabindex="0" data-id="2" onclick="openStop(2)" onkeydown="if(event.key==='Enter'||event.key===' ')openStop(2)">
+          <div class="sflag"><svg width="14" height="20" viewBox="0 0 14 20"><line x1="2" y1="1" x2="2" y2="19" stroke="rgba(1,57,82,.2)" stroke-width="1.5"/><polygon points="2,1 13,5.5 2,10" fill="#f1be48"/></svg></div>
+          <div class="sbox">🏛️</div><div class="slabel">Barneskole</div>
+        </div>
+
+        <div class="jstop" role="listitem" tabindex="0" data-id="3" onclick="openStop(3)" onkeydown="if(event.key==='Enter'||event.key===' ')openStop(3)">
+          <div class="sflag"><svg width="14" height="20" viewBox="0 0 14 20"><line x1="2" y1="1" x2="2" y2="19" stroke="rgba(1,57,82,.2)" stroke-width="1.5"/><polygon points="2,1 13,5.5 2,10" fill="#923c3d"/></svg></div>
+          <div class="sbox">🔀</div><div class="slabel">Overgang</div>
+        </div>
+
+        <div class="jstop" role="listitem" tabindex="0" data-id="4" onclick="openStop(4)" onkeydown="if(event.key==='Enter'||event.key===' ')openStop(4)">
+          <div class="sflag"><svg width="14" height="20" viewBox="0 0 14 20"><line x1="2" y1="1" x2="2" y2="19" stroke="rgba(1,57,82,.2)" stroke-width="1.5"/><polygon points="2,1 13,5.5 2,10" fill="#923c3d"/></svg></div>
+          <div class="sbox">🎒</div><div class="slabel">Ungdoms­skole</div>
+        </div>
+
+        <div class="jstop" role="listitem" tabindex="0" data-id="5" onclick="openStop(5)" onkeydown="if(event.key==='Enter'||event.key===' ')openStop(5)">
+          <div class="sflag"><svg width="14" height="20" viewBox="0 0 14 20"><line x1="2" y1="1" x2="2" y2="19" stroke="rgba(1,57,82,.2)" stroke-width="1.5"/><polygon points="2,1 13,5.5 2,10" fill="#923c3d"/></svg></div>
+          <div class="sbox">🎓</div><div class="slabel">VGS</div>
+        </div>
+
+        <div class="jstop" role="listitem" tabindex="0" data-id="6" onclick="openStop(6)" onkeydown="if(event.key==='Enter'||event.key===' ')openStop(6)">
+          <div class="sflag"><svg width="14" height="20" viewBox="0 0 14 20"><line x1="2" y1="1" x2="2" y2="19" stroke="rgba(1,57,82,.2)" stroke-width="1.5"/><polygon points="2,1 13,5.5 2,10" fill="#923c3d"/></svg></div>
+          <div class="sbox">🏢</div><div class="slabel">NAV / ung voksen</div>
+        </div>
+
+        <div class="jstop" role="listitem" tabindex="0" data-id="7" onclick="openStop(7)" onkeydown="if(event.key==='Enter'||event.key===' ')openStop(7)">
+          <div class="sflag"><svg width="14" height="20" viewBox="0 0 14 20"><line x1="2" y1="1" x2="2" y2="19" stroke="rgba(1,57,82,.2)" stroke-width="1.5"/><polygon points="2,1 13,5.5 2,10" fill="rgba(197,218,175,.8)"/></svg></div>
+          <div class="sbox">💼</div><div class="slabel">Arbeid / kvalifisering</div>
+        </div>
+
+        <div class="jend">→</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DETAIL PANEL -->
+  <div class="detail-panel" id="detailPanel" role="region" aria-live="polite">
+    <button class="pclos" onclick="closePanel()" aria-label="Lukk">×</button>
+    <div class="peyebrow" id="pEyebrow"></div>
+    <div class="phead">
+      <span class="ptitle" id="pTitle"></span>
+      <span class="ptag" id="pTag"></span>
+    </div>
+    <div class="pstat-grid" id="pStats"></div>
+    <div class="siglabel">Aktive signaler</div>
+    <div class="siglist" id="pSigs"></div>
+    <div class="pdesc" id="pDesc"></div>
+  </div>
+
+  <!-- BEVEGELSE -->
+  <div class="card">
+    <div class="slide-tag">Bevegelsesmåling – forflytninger mot innenforskap</div>
+    <div class="move-grid">
+      <div class="mcard" tabindex="0" onclick="openStop(0)"><div class="mcard-route">Helsestasjon → Barnehage</div><div class="mcard-icon">🏥</div><div class="mcard-num">14</div><div class="mcard-delta neg">−4 ↓</div><div class="mcard-period">siste 12 mnd</div></div>
+      <div class="mcard" tabindex="0" onclick="openStop(1)"><div class="mcard-route">Barnehage → Barneskole</div><div class="mcard-icon">🏫</div><div class="mcard-num">11</div><div class="mcard-delta neg">−2 ↓</div><div class="mcard-period">siste 12 mnd</div></div>
+      <div class="mcard" tabindex="0" onclick="openStop(2)"><div class="mcard-route">Barneskole → Overgang</div><div class="mcard-icon">🏛️</div><div class="mcard-num">9</div><div class="mcard-delta neg">−1 ↓</div><div class="mcard-period">siste 12 mnd</div></div>
+      <div class="mcard" tabindex="0" onclick="openStop(3)"><div class="mcard-route">Overgang → Ungdomsskole</div><div class="mcard-icon">🔀</div><div class="mcard-num">18</div><div class="mcard-delta neg">−1 ↓</div><div class="mcard-period">siste 12 mnd</div></div>
+      <div class="mcard" tabindex="0" onclick="openStop(4)"><div class="mcard-route">Ungdomsskole → VGS</div><div class="mcard-icon">🎒</div><div class="mcard-num">16</div><div class="mcard-delta neg">−2 ↓</div><div class="mcard-period">siste 12 mnd</div></div>
+      <div class="mcard" tabindex="0" onclick="openStop(5)"><div class="mcard-route">VGS → NAV / ung voksen</div><div class="mcard-icon">🎓</div><div class="mcard-num">15</div><div class="mcard-delta neg">−2 ↓</div><div class="mcard-period">siste 12 mnd</div></div>
+      <div class="mcard pos" tabindex="0" onclick="openStop(7)"><div class="mcard-route">NAV → Arbeid / kvalifisering</div><div class="mcard-icon">💼</div><div class="mcard-num">19</div><div class="mcard-delta pos">+1 ↑</div><div class="mcard-period">siste 12 mnd</div></div>
+    </div>
+  </div>
+
+  <!-- BOTTOM -->
+  <div class="bottom-grid">
+
+    <div class="bcard">
+      <h3>NEET-utvikling</h3>
+      <div class="bdesc">Unge ikke i arbeid, opplæring eller utdanning</div>
+      <div class="neet-big">1 057</div>
+      <div class="neet-delta">−11 ↓ <span style="font-size:9px;font-weight:300;color:var(--ink-dim)">siste 12 mnd</span></div>
+      <svg class="spark" viewBox="0 0 190 56">
+        <line x1="0" y1="9" x2="190" y2="9" stroke="var(--border)" stroke-width=".5"/>
+        <line x1="0" y1="32" x2="190" y2="32" stroke="var(--border)" stroke-width=".5"/>
+        <line x1="0" y1="53" x2="190" y2="53" stroke="var(--border)" stroke-width=".5"/>
+        <text x="0" y="12" font-size="7" fill="var(--ink-dim)" font-family="Barlow,sans-serif">1 500</text>
+        <text x="0" y="35" font-size="7" fill="var(--ink-dim)" font-family="Barlow,sans-serif">1 000</text>
+        <text x="0" y="55" font-size="7" fill="var(--ink-dim)" font-family="Barlow,sans-serif">500</text>
+        <polyline points="28,19 55,24 85,28 112,33 140,37 165,40 185,41" fill="none" stroke="var(--green)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+        <circle cx="28" cy="19" r="2.5" fill="var(--green)"/>
+        <circle cx="55" cy="24" r="2.5" fill="var(--green)"/>
+        <circle cx="85" cy="28" r="2.5" fill="var(--green)"/>
+        <circle cx="112" cy="33" r="2.5" fill="var(--green)"/>
+        <circle cx="140" cy="37" r="2.5" fill="var(--green)"/>
+        <circle cx="165" cy="40" r="2.5" fill="var(--green)"/>
+        <circle cx="185" cy="41" r="3.5" fill="var(--navy)"/>
+        <text x="22" y="55" font-size="7" fill="var(--ink-dim)" font-family="Barlow,sans-serif">2022</text>
+        <text x="80" y="55" font-size="7" fill="var(--ink-dim)" font-family="Barlow,sans-serif">2024</text>
+        <text x="132" y="55" font-size="7" fill="var(--ink-dim)" font-family="Barlow,sans-serif">2026</text>
+        <text x="174" y="55" font-size="7" fill="var(--ink-dim)" font-family="Barlow,sans-serif">2028</text>
+      </svg>
+    </div>
+
+    <div class="bcard">
+      <h3 style="color:var(--rust)">Røde flagg 2028</h3>
+      <div class="bdesc">Prioriterte innsatsområder</div>
+      <div class="alert-list">
+        <div class="alert-row"><svg width="13" height="14" viewBox="0 0 13 14" style="flex-shrink:0;margin-top:2px"><polygon points="1,12 1,2 11,6" fill="#923c3d"/></svg><span><strong style="font-weight:600;color:var(--navy)">Ungdomsskole–VGS-gjennomføring</strong></span></div>
+        <div class="alert-row"><svg width="13" height="14" viewBox="0 0 13 14" style="flex-shrink:0;margin-top:2px"><polygon points="1,12 1,2 11,6" fill="#923c3d"/></svg><span><strong style="font-weight:600;color:var(--navy)">Familier med sammensatt risiko</strong></span></div>
+        <div class="alert-row" style="margin-top:4px"><svg width="13" height="14" viewBox="0 0 13 14" style="flex-shrink:0;margin-top:2px"><polygon points="1,12 1,2 11,6" fill="#f1be48"/></svg><span>NAV / ung voksen: aktivitet uten progresjon</span></div>
+      </div>
+    </div>
+
+    <div class="bcard">
+      <h3>Tidlige tegn – topp 4</h3>
+      <div class="bdesc">Hyppigst registrerte risikofaktorer</div>
+      <div class="top4-list">
+        <div class="top4-row"><span class="t4n">1.</span><span>Fravær</span></div>
+        <div class="top4-row"><span class="t4n">2.</span><span>Karakterfall / skolevegring</span></div>
+        <div class="top4-row"><span class="t4n">3.</span><span>Lavinntekt / ustabil bolig</span></div>
+        <div class="top4-row"><span class="t4n">4.</span><span>Psykisk belastning / lav mestring</span></div>
+      </div>
+    </div>
+
+    <div class="bcard">
+      <h3>Status per overgang</h3>
+      <div class="bdesc" style="margin-bottom:8px">Risiko i 2028</div>
+      <div class="status-rows">
+        <div class="srow"><span class="sroute">Helsest. → Bhg.</span><span class="sdesc">Forverret – bekymring tidlig</span><span class="stag stag-r">Høy</span></div>
+        <div class="srow"><span class="sroute">Bhg. → Bskole</span><span class="sdesc">Sårbar – lite bevegelse</span><span class="stag stag-y">Mod.</span></div>
+        <div class="srow"><span class="sroute">Bskole → Overg.</span><span class="sdesc">Skjør utvikling</span><span class="stag stag-y">Mod.</span></div>
+        <div class="srow"><span class="sroute">Overg. → U.skole</span><span class="sdesc">Knekkpunkt</span><span class="stag stag-r">Høy</span></div>
+        <div class="srow"><span class="sroute">U.skole → VGS</span><span class="sdesc">Mange faller av</span><span class="stag stag-r">Høy</span></div>
+        <div class="srow"><span class="sroute">VGS → NAV</span><span class="sdesc">Aktivt – ikke kvalifisert</span><span class="stag stag-y">Mod.</span></div>
+        <div class="srow"><span class="sroute">NAV → Arbeid</span><span class="sdesc">Fungerer – god bevegelse</span><span class="stag stag-g">Lav</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const STOPS=[
+  {id:0,title:"Helsestasjon",emoji:"🏥",eyebrow:"Stopp 1 av 8 — Første kontaktpunkt",tagClass:"tag-rust",tagLabel:"Høy risiko",
+   stats:[{l:"Barn m/bekymring",v:"214",c:"rust",d:"+ 18 ↑ vs. 2027",dc:"d-neg"},{l:"Forflytninger",v:"14",c:"sky",d:"− 4 ↓ vs. 2027",dc:"d-neg"},{l:"Responstid (dager)",v:"8",c:"amber",d:"+ 2 ↑ vs. 2027",dc:"d-neg"},{l:"Med koordinator",v:"67 %",c:"green",d:"+ 3 pp ↑",dc:"d-pos"}],
+   sigs:[{dot:"sd-rust",t:"Økt antall bekymringsmeldinger – vekstforsinkelse og ernæringsutfordringer"},{dot:"sd-rust",t:"17 familier uten fast helsestasjonstilknytning per jan. 2028"},{dot:"sd-amber",t:"Økt forekomst av postpartumsymptomer uten adekvat oppfølging"},{dot:"sd-amber",t:"Språklig barriere registrert i 31 % av bekymringssakene"}],
+   desc:"Helsestasjon er første kontaktpunkt. Tidlige tegn fanges og videreformidles til barnehage. Responstiden har økt og trenger prioritering."},
+  {id:1,title:"Barnehage",emoji:"🏫",eyebrow:"Stopp 2 av 8 — Tidlig innsats",tagClass:"tag-amber",tagLabel:"Moderat risiko",
+   stats:[{l:"Barn m/tiltak",v:"189",c:"amber",d:"+ 7 ↑ vs. 2027",dc:"d-neg"},{l:"Forflytninger",v:"11",c:"sky",d:"− 2 ↓ vs. 2027",dc:"d-neg"},{l:"Felles plan m/bskole",v:"54 %",c:"amber",d:"− 4 pp ↓",dc:"d-neg"},{l:"Tilpasset tilbud",v:"78 %",c:"green",d:"+ 2 pp ↑",dc:"d-pos"}],
+   sigs:[{dot:"sd-amber",t:"Overgang til barneskole mangler felles plan i 46 % av sakene"},{dot:"sd-amber",t:"Økt andel barn med forsinkede motoriske ferdigheter — 23 nye saker"},{dot:"sd-green",t:"God samhandling mellom barnehage og PPT i Tønsberg sentrum"},{dot:"sd-rust",t:"3 barnehager mangler tilgang til felles fagplattform"}],
+   desc:"Barnehagefasen er kritisk for tidlig innsats. Overgangen til barneskole er fremdeles fragmentert. Felles digitale rutiner er under innføring."},
+  {id:2,title:"Barneskole",emoji:"🏛️",eyebrow:"Stopp 3 av 8 — Mønstre etableres",tagClass:"tag-amber",tagLabel:"Moderat risiko",
+   stats:[{l:"Elever m/bekymring",v:"312",c:"amber",d:"+ 14 ↑ vs. 2027",dc:"d-neg"},{l:"Forflytninger",v:"9",c:"sky",d:"− 1 ↓ vs. 2027",dc:"d-neg"},{l:"Høyt fravær (>15 %)",v:"84",c:"rust",d:"+ 11 ↑ vs. 2027",dc:"d-neg"},{l:"M/tverrfaglig plan",v:"61 %",c:"green",d:"+ 5 pp ↑",dc:"d-pos"}],
+   sigs:[{dot:"sd-rust",t:"Fravær over 15 % er det hyppigste enkeltregistrerte risikosignalet"},{dot:"sd-amber",t:"Karakterdifferanse mellom skolekretser øker — systematisk ulikhet"},{dot:"sd-amber",t:"Økt belastning i familier med migrasjonsbakgrunn — 41 nye saker"},{dot:"sd-green",t:"Riggens illustrasjonsverktøy brukes nå i alle foreldremøter"}],
+   desc:"Barneskolen er nøkkelarenan for varige mønstre. Høyt fravær er et ubesvart signal. Tverrfaglig oppfølging virker, men når ikke alle."},
+  {id:3,title:"Overgang",emoji:"🔀",eyebrow:"Stopp 4 av 8 — Kritisk knekkpunkt",tagClass:"tag-rust",tagLabel:"Høy risiko",
+   stats:[{l:"I risiko v/overgang",v:"147",c:"rust",d:"+ 22 ↑ vs. 2027",dc:"d-neg"},{l:"Forflytninger",v:"18",c:"sky",d:"− 1 ↓ vs. 2027",dc:"d-neg"},{l:"Uten varsel til u.skole",v:"38 %",c:"rust",d:"+ 5 pp ↑",dc:"d-neg"},{l:"Med koordinert plan",v:"62 %",c:"green",d:"+ 8 pp ↑",dc:"d-pos"}],
+   sigs:[{dot:"sd-rust",t:"38 % av risikoelever ankommer ungdomsskolen uten overlevering"},{dot:"sd-rust",t:"12 familier med sammensatt risiko ble ikke fanget i overgangsmøtene"},{dot:"sd-amber",t:"Varierende praksis mellom skolene — ikke alle bruker felles protokoll"},{dot:"sd-green",t:"Ny digital overgangsbok innføres fra høst 2028"}],
+   desc:"Overgangen er det mest kritiske punktet i reisen. Her mister riggen kontakten med flest barn. KLG bør prioritere dette i 2028-budsjettet."},
+  {id:4,title:"Ungdomsskole",emoji:"🎒",eyebrow:"Stopp 5 av 8 — Avgjørende fase",tagClass:"tag-rust",tagLabel:"Høy risiko",
+   stats:[{l:"I risikokategori",v:"203",c:"rust",d:"+ 19 ↑ vs. 2027",dc:"d-neg"},{l:"Forflytninger",v:"16",c:"sky",d:"− 2 ↓ vs. 2027",dc:"d-neg"},{l:"Søker ikke VGS",v:"42",c:"rust",d:"+ 8 ↑ vs. 2027",dc:"d-neg"},{l:"Med mentor",v:"71 %",c:"green",d:"+ 6 pp ↑",dc:"d-pos"}],
+   sigs:[{dot:"sd-rust",t:"42 søker ikke VGS og havner direkte i NEET — riggens største enkeltutfordring"},{dot:"sd-rust",t:"34 saker der ingen sektor har primæransvar for familien"},{dot:"sd-amber",t:"Karakterfallet i 9. klasse er statistisk signifikant"},{dot:"sd-green",t:"Mentorordning gir effekt: 71 % har nå fast kontaktperson"}],
+   desc:"Ungdomsskolen er riggens største utfordring i 2028. Ressurser til mentor og familieoppfølging er dokumentert effektive, men underfinansierte."},
+  {id:5,title:"VGS",emoji:"🎓",eyebrow:"Stopp 6 av 8 — Fylkeskommunalt grensesnitt",tagClass:"tag-rust",tagLabel:"Høy risiko",
+   stats:[{l:"Avbrudd VGS (12 mnd)",v:"118",c:"rust",d:"+ 9 ↑ vs. 2027",dc:"d-neg"},{l:"Forflytninger",v:"15",c:"sky",d:"− 2 ↓ vs. 2027",dc:"d-neg"},{l:"Direkte til NEET",v:"67",c:"rust",d:"+ 11 ↑ vs. 2027",dc:"d-neg"},{l:"Fullføring",v:"71 %",c:"amber",d:"− 2 pp ↓",dc:"d-neg"}],
+   sigs:[{dot:"sd-rust",t:"67 ungdommer fra VGS-avbrudd til NEET uten fangst i systemet"},{dot:"sd-rust",t:"Yrkesfag har lavest fullføring (64 %) — krever økt lærlingeplassering"},{dot:"sd-amber",t:"Mangler formell protokoll for informasjonsutveksling VGS–NAV"},{dot:"sd-amber",t:"Psykisk helse er medvirkende årsak i 51 % av avbruddene"}],
+   desc:"Tønsberg arbeider med en bilateral avtale om informasjonsdeling for å tette hullet mellom VGS-avbrudd og tidlig NAV-kontakt."},
+  {id:6,title:"NAV / ung voksen",emoji:"🏢",eyebrow:"Stopp 7 av 8 — Siste fangstpunkt",tagClass:"tag-rust",tagLabel:"Høy risiko",
+   stats:[{l:"Aktive unge 18–29",v:"389",c:"rust",d:"+ 14 ↑ vs. 2027",dc:"d-neg"},{l:"Forflytninger til arbeid",v:"19",c:"green",d:"+ 1 ↑ vs. 2027",dc:"d-pos"},{l:"Uten progresjon >6 mnd",v:"124",c:"rust",d:"+ 22 ↑ vs. 2027",dc:"d-neg"},{l:"I kvalifiseringsprogr.",v:"58 %",c:"amber",d:"+ 3 pp ↑",dc:"d-pos"}],
+   sigs:[{dot:"sd-rust",t:"124 unge i aktivitet uten dokumenterbar progresjon over 6 måneder"},{dot:"sd-rust",t:"NAV og kommunens tjenester mangler felles digitalt grensesnitt"},{dot:"sd-amber",t:"Boligutsikkerhet medvirkende faktor i 44 % av langvarige saker"},{dot:"sd-green",t:"Overgangen til arbeid er riggens eneste positive bevegelsesmåling"}],
+   desc:"Det er positivt at forflytningene til arbeid øker, men antall unge uten progresjon vokser raskt. Tverrfaglige team med botilbud er neste prioritet."},
+  {id:7,title:"Arbeid / kvalifisering",emoji:"💼",eyebrow:"Stopp 8 av 8 — Målet for reisen",tagClass:"tag-green",tagLabel:"Lav risiko",
+   stats:[{l:"I ordinært arbeid",v:"247",c:"green",d:"+ 19 ↑ vs. 2027",dc:"d-pos"},{l:"I kvalifisering",v:"83",c:"sky",d:"+ 7 ↑ vs. 2027",dc:"d-pos"},{l:"Falt tilbake til NEET",v:"31",c:"amber",d:"+ 3 ↑ vs. 2027",dc:"d-neg"},{l:"Stabil etter 12 mnd",v:"74 %",c:"green",d:"+ 4 pp ↑",dc:"d-pos"}],
+   sigs:[{dot:"sd-green",t:"74 % stabile i arbeid etter 12 måneder — beste måling i riggen"},{dot:"sd-green",t:"34 nye kommunale praksisplasser opprettet i 2027–2028"},{dot:"sd-amber",t:"31 falt tilbake til NEET — primært helseutfordringer og boligbrudd"},{dot:"sd-green",t:"Arbeid og varig kvalifisering er selve målet for reisen"}],
+   desc:"Resultatene her er riggens viktigste suksessindikator. Stabilitetstallene er gode, men tilbakefall krever bedre botilbud og helseoppfølging."},
+];
+
+function openStop(id){
+  const s=STOPS[id];
+  document.querySelectorAll('.jstop').forEach(el=>el.classList.toggle('active',+el.dataset.id===id));
+  document.getElementById('pEyebrow').textContent=s.eyebrow;
+  document.getElementById('pTitle').textContent=s.emoji+' '+s.title;
+  const t=document.getElementById('pTag');t.textContent=s.tagLabel;t.className='ptag '+s.tagClass;
+  document.getElementById('pStats').innerHTML=s.stats.map(st=>`<div class="pstat"><div class="pstat-label">${st.l}</div><div class="pstat-val ${st.c}">${st.v}</div><div class="pstat-delta ${st.dc}">${st.d}</div></div>`).join('');
+  document.getElementById('pSigs').innerHTML=s.sigs.map(sg=>`<div class="sigrow"><span class="sdot ${sg.dot}"></span><span>${sg.t}</span></div>`).join('');
+  document.getElementById('pDesc').textContent=s.desc;
+  const p=document.getElementById('detailPanel');
+  p.classList.add('open');
+  p.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function closePanel(){
+  document.getElementById('detailPanel').classList.remove('open');
+  document.querySelectorAll('.jstop').forEach(el=>el.classList.remove('active'));
+}
+</script>
+</body>
+</html>
