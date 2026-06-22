@@ -168,11 +168,69 @@ body{font-family:var(--serif);background:var(--bg);color:var(--ink);min-height:1
 .stag-y{background:var(--amber-bg);color:#7a5900}
 .stag-g{background:var(--green-bg);color:var(--green)}
 
+/* ── MÅL-RAD ── */
+.goals-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.gcard{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:14px;padding:13px 14px;
+  display:flex;flex-direction:column;gap:6px;
+}
+.gcard-top{display:flex;align-items:center;gap:8px}
+.gicon{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.gi-sky{background:var(--sky-bg)}
+.gi-sage{background:var(--sage-bg)}
+.gi-amber{background:var(--amber-bg)}
+.gi-rust{background:var(--rust-bg)}
+.gnum{font-family:var(--hand);font-size:26px;color:var(--navy);opacity:.18;line-height:1;margin-left:auto}
+.gtitle{font-size:11px;font-weight:700;color:var(--navy);line-height:1.3}
+.gstat-row{display:flex;flex-direction:column;gap:3px;border-top:1px solid var(--border);padding-top:8px}
+.gstat{display:flex;justify-content:space-between;align-items:baseline;gap:4px}
+.gstat-label{font-size:9px;color:var(--ink-dim);font-weight:300}
+.gstat-val{font-size:12px;font-weight:700;color:var(--navy)}
+.gstat-val.neg{color:var(--rust)}.gstat-val.pos{color:var(--green)}.gstat-val.warn{color:#7a5900}
+.gdelta{font-size:8px;font-weight:600}
+.gdelta.neg{color:var(--rust)}.gdelta.pos{color:var(--green)}
+
+@media(max-width:700px){.goals-row{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:600px){
   .topbar{padding:12px 16px 12px}
   .main{padding:10px 12px 28px}
   .topbar-stats{gap:6px}
+  .goals-row{grid-template-columns:repeat(2,1fr)}
 }
+
+.back-scenario{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  color:var(--sage);
+  text-decoration:none;
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  padding:7px 12px;
+  border:1px solid rgba(197,218,175,.35);
+  border-radius:999px;
+  background:rgba(255,255,255,.06);
+  transition:background .15s,color .15s,border-color .15s;
+}
+.back-scenario:hover{
+  background:rgba(197,218,175,.16);
+  color:var(--white);
+  border-color:rgba(197,218,175,.55);
+}
+.topbar-actions{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+}
+@media(max-width:600px){
+  .topbar-actions{width:100%;justify-content:space-between}
+  .back-scenario{font-size:9px;padding:6px 10px}
+}
+
 </style>
 </head>
 <body>
@@ -183,15 +241,18 @@ body{font-family:var(--serif);background:var(--bg);color:var(--ink);min-height:1
       <div class="kicker">Utenforskapsriggen · Tønsberg kommune</div>
       <h1>Dashboard <span>2028</span></h1>
     </div>
-    <div class="legend">
-      <div class="legend-item">
-        <svg width="13" height="15" viewBox="0 0 13 15"><line x1="2" y1="1" x2="2" y2="14" stroke="rgba(197,218,175,.45)" stroke-width="1.5"/><polygon points="2,1 12,5 2,9" fill="#923c3d"/></svg>Høy risiko
-      </div>
-      <div class="legend-item">
-        <svg width="13" height="15" viewBox="0 0 13 15"><line x1="2" y1="1" x2="2" y2="14" stroke="rgba(197,218,175,.45)" stroke-width="1.5"/><polygon points="2,1 12,5 2,9" fill="#f1be48"/></svg>Moderat
-      </div>
-      <div class="legend-item">
-        <svg width="13" height="15" viewBox="0 0 13 15"><line x1="2" y1="1" x2="2" y2="14" stroke="rgba(197,218,175,.45)" stroke-width="1.5"/><polygon points="2,1 12,5 2,9" fill="rgba(197,218,175,.75)"/></svg>Lav risiko
+    <div class="topbar-actions">
+      <a class="back-scenario" href="../">← Tilbake til scenario</a>
+      <div class="legend">
+        <div class="legend-item">
+          <svg width="13" height="15" viewBox="0 0 13 15"><line x1="2" y1="1" x2="2" y2="14" stroke="rgba(197,218,175,.45)" stroke-width="1.5"/><polygon points="2,1 12,5 2,9" fill="#923c3d"/></svg>Høy risiko
+        </div>
+        <div class="legend-item">
+          <svg width="13" height="15" viewBox="0 0 13 15"><line x1="2" y1="1" x2="2" y2="14" stroke="rgba(197,218,175,.45)" stroke-width="1.5"/><polygon points="2,1 12,5 2,9" fill="#f1be48"/></svg>Moderat
+        </div>
+        <div class="legend-item">
+          <svg width="13" height="15" viewBox="0 0 13 15"><line x1="2" y1="1" x2="2" y2="14" stroke="rgba(197,218,175,.45)" stroke-width="1.5"/><polygon points="2,1 12,5 2,9" fill="rgba(197,218,175,.75)"/></svg>Lav risiko
+        </div>
       </div>
     </div>
   </div>
